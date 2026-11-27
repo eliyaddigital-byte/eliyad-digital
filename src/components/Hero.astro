@@ -127,7 +127,17 @@ const waBase = site.contact.whatsapp ? `https://wa.me/${site.contact.whatsapp}` 
       const cpaBetter = budget / ((leads * better) / 100);
       res('insight').textContent = `אם עוד 2% מהפניות ייסגרו, העלות ללקוח תרד ל-${ils(cpaBetter)} באותו תקציב.`;
       if (wa && form.dataset.wa) {
-        const msg = `היי BoostRize, עשיתי חישוב באתר: תקציב פרסום ${ils(budget)} בחודש, ${nf.format(leads)} פניות, ${close}% נסגרות. עלות ללקוח: ${ils(cpa)}. אשמח לבדוק איך משפרים את זה.`;
+        const msg = [
+          'היי BoostRize, עשיתי חישוב באתר:',
+          '',
+          `*תקציב פרסום בחודש:* ${ils(budget)}`,
+          `*פניות בחודש:* ${nf.format(leads)}`,
+          `*אחוז שנסגרים:* ${close}%`,
+          `*עלות לליד:* ${ils(cpl)}`,
+          `*עלות ללקוח:* ${ils(cpa)}`,
+          '',
+          'אשמח לבדוק איך משפרים את זה.',
+        ].join('\n');
         wa.href = `${form.dataset.wa}?text=${encodeURIComponent(msg)}`;
       }
       form.querySelectorAll<HTMLInputElement>('input[type=range]').forEach(paintTrack);
