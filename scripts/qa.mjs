@@ -105,8 +105,10 @@ for (const [vpName, vp] of Object.entries(viewports)) {
   await page.screenshot({ path: `${OUT}/mobile-menu-open.png` });
   await page.keyboard.press('Escape');
   checks.menuClosesOnEsc = !(await page.isVisible('#mobile-menu'));
-  await page.click('#tab-data');
-  checks.tabSwitch = await page.isVisible('#panel-data') && !(await page.isVisible('#panel-ads'));
+  await page.click('.svc-list summary >> nth=0');
+  checks.serviceOpens = await page.evaluate(() => document.querySelector('.svc-list details')?.hasAttribute('open'));
+  await page.locator('#calc-close').fill('20');
+  checks.calculator = await page.evaluate(() => ({ cpa: document.querySelector('[data-res="cpa"]')?.textContent, waHasNumbers: document.querySelector('[data-calc-wa]')?.getAttribute('href')?.includes('20%25') }));
   await page.click('.qa summary');
   checks.faqOpens = await page.evaluate(() => document.querySelector('.qa')?.hasAttribute('open'));
   await page.evaluate(() => scrollTo({ top: 1600, behavior: 'instant' }));

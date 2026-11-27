@@ -20,13 +20,12 @@ const embed =
       : '';
 ---
 {show && (
-  <section class="section vsl" id="video" aria-labelledby="video-title" data-section="video">
-    <div class="container">
-      <div class="section-head section-head--center" data-reveal>
-        <p class="eyebrow">{video.eyebrow}</p>
+  <section class="band vsl" id="video" aria-labelledby="video-title" data-section="video">
+    <div class="wrap">
+      <div class="section-head section-head--center">
         <h2 id="video-title">{video.title}</h2>
       </div>
-      <div class="vsl__frame" data-reveal data-vsl data-embed={embed} data-title={video.title}>
+      <div class="vsl__frame" data-vsl data-embed={embed} data-title={video.title}>
         {video.provider === 'file' ? (
           <video controls preload="none" playsinline poster={poster || undefined} data-vsl-file>
             <source src={withBase(video.id)} />
@@ -65,11 +64,11 @@ const embed =
 </script>
 
 <style>
-  .vsl__frame { position: relative; max-width: 960px; margin-inline: auto; aspect-ratio: 16 / 9; background: var(--ink); border: 2px solid var(--ink); border-radius: var(--radius); overflow: hidden; box-shadow: 12px 12px 0 var(--orange); }
+  .vsl__frame { position: relative; max-width: 960px; margin-inline: auto; aspect-ratio: 16 / 9; background: var(--black); border: 2px solid var(--black); border-radius: var(--r-field); overflow: hidden; box-shadow: none; }
   .vsl__frame :global(iframe), .vsl__frame video { width: 100%; height: 100%; border: 0; }
-  .vsl__play { position: absolute; inset: 0; border: 0; padding: 0; background: var(--ink); display: grid; place-items: center; }
+  .vsl__play { position: absolute; inset: 0; border: 0; padding: 0; background: var(--black); display: grid; place-items: center; }
   .vsl__play img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.85; }
-  .vsl__btn { position: relative; width: 92px; height: 92px; border-radius: 50%; background: var(--orange); color: var(--ink); display: grid; place-items: center; transition: transform var(--dur) var(--ease-out); box-shadow: 0 0 0 0 rgb(243 122 31 / 0.6); animation: ring 2.4s infinite; }
+  .vsl__btn { position: relative; width: 92px; height: 92px; border-radius: 50%; background: var(--orange); color: var(--black); display: grid; place-items: center; transition: transform 300ms var(--ease); box-shadow: 0 0 0 0 rgb(243 122 31 / 0.6); animation: ring 2.4s infinite; }
   .vsl__play:hover .vsl__btn { transform: scale(1.08); }
   .vsl__btn :global(svg) { fill: currentColor; margin-inline-end: -4px; }
   @keyframes ring { 70% { box-shadow: 0 0 0 22px rgb(243 122 31 / 0); } 100% { box-shadow: 0 0 0 0 rgb(243 122 31 / 0); } }

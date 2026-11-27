@@ -8,7 +8,7 @@
 import Icon from './Icon.astro';
 import { leadSection } from '../content/home';
 import { site, leadFormActive, hasDirectContact, whatsappUrl, telUrl, mailUrl } from '../config/site';
-import { mark, withBase } from '../lib/text';
+import { withBase } from '../lib/text';
 const cfg = {
   endpoint: site.leads.endpoint,
   turnstile: site.leads.turnstileSiteKey,
@@ -16,28 +16,27 @@ const cfg = {
   thankYou: withBase('/thank-you/'),
 };
 ---
-<section class="section lead" id="contact" aria-labelledby="lead-title" data-section="contact">
-  <div class="container lead__layout">
-    <div class="lead__copy" data-reveal>
-      <p class="eyebrow">{leadSection.eyebrow}</p>
-      <h2 id="lead-title" set:html={mark(leadSection.title)} />
-      <p class="lead__sub">{leadSection.subtitle}</p>
+<section class="band band--orange lead" id="contact" aria-labelledby="lead-title" data-section="contact">
+  <div class="wrap lead__layout">
+    <div class="lead__copy">
+      <h2 id="lead-title" class="h-section">{leadSection.title}</h2>
+      <p class="lead__sub">{leadFormActive ? leadSection.subtitle : 'ספרו לנו על העסק בוואטסאפ או בטלפון. נעבור יחד על המספרים, נזהה איפה הכסף נוזל ונגיד בכנות אם ואיך אנחנו יכולים לעזור.'}</p>
       <ul class="lead__promises" role="list">
-        {leadSection.promises.map((p) => <li><span><Icon name="check" size={16} stroke={3} /></span>{p}</li>)}
+        {leadSection.promises.map((p) => <li><Icon name="check" size={18} stroke={3} />{p}</li>)}
       </ul>
-      {hasDirectContact && (
+      {hasDirectContact && leadFormActive && (
         <div class="lead__direct">
           <p>מעדיפים לדבר עכשיו?</p>
           <div>
-            {whatsappUrl && <a class="btn btn--ghost" href={whatsappUrl} target="_blank" rel="noopener" data-cta-location="contact"><Icon name="whatsapp" size={20} /> וואטסאפ</a>}
-            {telUrl && <a class="btn btn--ghost" href={telUrl} data-cta-location="contact"><Icon name="phone" size={20} /> {site.contact.phone}</a>}
-            {mailUrl && <a class="btn btn--ghost" href={mailUrl} data-cta-location="contact"><Icon name="mail" size={20} /> מייל</a>}
+            {whatsappUrl && <a class="btn btn--outline" href={whatsappUrl} target="_blank" rel="noopener" data-cta-location="contact"><Icon name="whatsapp" size={20} /> וואטסאפ</a>}
+            {telUrl && <a class="btn btn--outline" href={telUrl} data-cta-location="contact"><Icon name="phone" size={20} /><span dir="ltr">{site.contact.phone}</span></a>}
+            {mailUrl && <a class="btn btn--outline" href={mailUrl} data-cta-location="contact"><Icon name="mail" size={20} /> מייל</a>}
           </div>
         </div>
       )}
     </div>
 
-    <div class="lead__card" data-reveal style="--i:1">
+    <div class="lead__card">
       {leadFormActive ? (
         <form class="lf" novalidate data-lead-form data-config={JSON.stringify(cfg)} aria-describedby="lf-privacy">
           <div class="lf__progress" aria-hidden="true"><span data-lf-bar></span></div>
@@ -60,7 +59,7 @@ const cfg = {
               <input class="input" id="lf-email" name="email" type="email" autocomplete="email" required maxlength="120" dir="ltr" aria-describedby="lf-email-err" />
               <p class="field-error" id="lf-email-err" aria-live="polite"></p>
             </div>
-            <button type="button" class="btn btn--primary btn--lg btn--block" data-lf-next>המשך <Icon name="arrow-left" size={20} class="btn__arrow" /></button>
+            <button type="button" class="btn btn--black btn--lg btn--block" data-lf-next>המשך</button>
           </fieldset>
 
           <fieldset class="lf__step" data-step="2" hidden>
@@ -107,10 +106,9 @@ const cfg = {
             <div data-lf-turnstile></div>
 
             <div class="lf__actions">
-              <button type="button" class="lf__back" data-lf-back><Icon name="arrow-left" size={18} class="lf__back-ic" /> חזרה</button>
-              <button type="submit" class="btn btn--primary btn--lg" data-lf-submit>
+              <button type="button" class="lf__back" data-lf-back>חזרה לשלב הקודם</button>
+              <button type="submit" class="btn btn--black btn--lg" data-lf-submit>
                 <span data-lf-submit-label>שליחה ותיאום שיחה</span>
-                <Icon name="arrow-left" size={20} class="btn__arrow" />
               </button>
             </div>
           </fieldset>
@@ -124,13 +122,13 @@ const cfg = {
       ) : (
         <div class="lf-off" data-lead-form-inactive>
           <span class="lf-off__icon"><Icon name="clock" size={28} /></span>
-          <h3>הטופס יעלה לאוויר ממש בקרוב</h3>
-          <p>אנחנו משלימים את חיבור מערכת קבלת הפניות, כדי שאף פנייה לא תלך לאיבוד.</p>
+          <h3>הדרך הכי מהירה לדבר איתנו</h3>
+          <p>שלחו הודעה עם כמה מילים על העסק, ונחזור אליכם לתיאום שיחה.</p>
           {hasDirectContact ? (
             <div class="lf-off__links">
-              {whatsappUrl && <a class="btn btn--primary btn--block" href={whatsappUrl} target="_blank" rel="noopener" data-cta-location="contact-inactive"><Icon name="whatsapp" size={20} /> דברו איתנו בוואטסאפ</a>}
-              {telUrl && <a class="btn btn--ghost btn--block" href={telUrl} data-cta-location="contact-inactive"><Icon name="phone" size={20} /> {site.contact.phone}</a>}
-              {mailUrl && <a class="btn btn--ghost btn--block" href={mailUrl} data-cta-location="contact-inactive"><Icon name="mail" size={20} /> {site.contact.email}</a>}
+              {whatsappUrl && <a class="btn btn--black btn--block" href={whatsappUrl} target="_blank" rel="noopener" data-cta-location="contact-inactive"><Icon name="whatsapp" size={20} />שליחת הודעה בוואטסאפ</a>}
+              {telUrl && <a class="btn btn--outline btn--block" href={telUrl} data-cta-location="contact-inactive"><Icon name="phone" size={20} /><span dir="ltr">{site.contact.phone}</span></a>}
+              {mailUrl && <a class="btn btn--outline btn--block" href={mailUrl} data-cta-location="contact-inactive"><Icon name="mail" size={20} /> {site.contact.email}</a>}
             </div>
           ) : (
             <p class="lf-off__note">בינתיים אפשר להתעדכן כאן שוב בקרוב.</p>
@@ -316,63 +314,48 @@ const cfg = {
 </script>
 
 <style>
-  .lead { background: var(--orange); overflow: hidden; }
-  .lead::before {
-    content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0.18;
-    background-image: radial-gradient(var(--ink) 1.2px, transparent 1.2px); background-size: 22px 22px;
-    mask-image: linear-gradient(to left, #000, transparent 60%);
-  }
-  .lead .eyebrow { color: var(--ink); }
-  .lead .eyebrow::before { background: var(--ink); }
-  .lead :global(.mark::after) { background: var(--paper); }
-  .lead__layout { position: relative; display: grid; gap: 3rem; align-items: start; }
-  .lead__copy h2 { font-size: var(--fs-h2); }
-  .lead__sub { margin-top: 1.25rem; font-size: var(--fs-lg); max-width: 34rem; }
-  .lead__promises { margin-top: 1.75rem; display: grid; gap: 0.75rem; }
-  .lead__promises li { display: flex; gap: 0.7rem; align-items: center; font-weight: 600; }
-  .lead__promises li > span { width: 26px; height: 26px; display: grid; place-items: center; border-radius: 50%; background: var(--ink); color: var(--orange); flex: none; }
-  .lead__direct { margin-top: 2rem; }
-  .lead__direct p { font-weight: 700; margin-bottom: 0.6rem; }
+  .lead__layout { display: grid; gap: 3rem; align-items: start; }
+  .lead__copy { display: grid; gap: 1.5rem; align-content: start; }
+  .lead__sub { font-size: var(--t-md); max-width: 40ch; }
+  .lead__promises { display: grid; gap: 0.6rem; font-weight: 500; }
+  .lead__promises li { display: flex; gap: 0.6rem; align-items: center; }
+  .lead__direct p { font-weight: 600; margin-bottom: 0.6rem; }
   .lead__direct div { display: flex; flex-wrap: wrap; gap: 0.6rem; }
-  .lead__direct .btn { --btn-shadow: var(--paper); }
 
-  .lead__card { background: var(--white); border: 2px solid var(--ink); border-radius: var(--radius); box-shadow: 12px 12px 0 var(--ink); padding: clamp(1.5rem, 1rem + 2vw, 2.5rem); }
+  .lead__card { background: var(--white); border-radius: var(--r-panel); padding: clamp(1.5rem, 1rem + 2vw, 2.75rem); }
   .lf { display: grid; gap: 1rem; }
-  .lf__progress { height: 6px; background: var(--paper-2); border-radius: 6px; overflow: hidden; }
-  .lf__progress span { display: block; height: 100%; width: 50%; background: var(--orange); transition: width var(--dur) var(--ease-out); }
-  .lf__stepinfo { font-size: var(--fs-xs); font-weight: 700; color: var(--ink-soft); }
+  .lf__progress { height: 4px; background: var(--fog); border-radius: 4px; overflow: hidden; }
+  .lf__progress span { display: block; height: 100%; width: 50%; background: var(--black); transition: width 300ms var(--ease); }
+  .lf__stepinfo { font-size: var(--t-sm); color: var(--slate); }
   .lf__step { border: 0; padding: 0; min-width: 0; display: grid; gap: 1.1rem; }
-  .lf__legend { font-size: var(--fs-h3); font-weight: 800; margin-bottom: 0.25rem; padding: 0; }
-  .lf__legend .opt { display: block; font-size: var(--fs-sm); font-weight: 400; color: var(--ink-soft); margin-top: 0.2rem; }
+  .lf__legend { font-family: var(--display); font-weight: 700; font-size: var(--d-sm); line-height: 1; padding: 0; margin-bottom: 0.25rem; }
+  .lf__legend .opt { display: block; font-family: var(--text); font-size: var(--t-sm); font-weight: 400; color: var(--slate); margin-top: 0.4rem; }
   .lf__row { display: grid; gap: 1.1rem; }
   .lf__goals { border: 0; padding: 0; min-width: 0; }
   .lf__goals legend { margin-bottom: 0.5rem; padding: 0; }
   .lf__chips { display: flex; flex-wrap: wrap; gap: 0.45rem; }
   .chip { position: relative; }
   .chip input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
-  .chip span { display: inline-flex; align-items: center; min-height: 40px; padding: 0.4rem 0.85rem; border: 1.5px solid var(--line); border-radius: var(--radius-pill); font-size: var(--fs-sm); font-weight: 500; transition: all var(--dur-fast); background: var(--white); }
-  .chip:hover span { border-color: var(--ink); }
-  .chip input:checked + span { background: var(--ink); color: var(--white); border-color: var(--ink); }
-  .chip input:focus-visible + span { outline: 3px solid var(--orange-600); outline-offset: 2px; }
-  .lf__consent { margin-top: 0.25rem; }
+  .chip span { display: inline-flex; align-items: center; min-height: 42px; padding: 0.4rem 0.95rem; border: 1.5px solid #b9c0c8; border-radius: var(--r-pill); font-size: var(--t-sm); transition: background-color 160ms, color 160ms, border-color 160ms; }
+  .chip:hover span { border-color: var(--black); }
+  .chip input:checked + span { background: var(--black); color: var(--white); border-color: var(--black); }
+  .chip input:focus-visible + span { outline: 3px solid var(--orange); outline-offset: 2px; }
   .lf__hp { position: absolute; inset-inline-start: -9999px; width: 1px; height: 1px; overflow: hidden; }
   .lf__actions { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap-reverse; }
   .lf__actions .btn { flex: 1; }
-  .lf__back { display: inline-flex; align-items: center; gap: 0.4rem; background: none; border: 0; font-weight: 600; min-height: 44px; padding: 0.4rem; text-decoration: underline; }
-  .lf__back :global(.lf__back-ic) { transform: scaleX(-1); }
-  .lf__status { padding: 0.9rem 1rem; border-radius: var(--radius); font-weight: 600; font-size: var(--fs-sm); }
-  .lf__status--error { background: #fdecea; color: var(--danger); border: 1.5px solid #f3b9b3; }
-  .lf__privacy { display: flex; gap: 0.5rem; align-items: flex-start; font-size: var(--fs-xs); color: var(--ink-soft); line-height: 1.5; }
+  .lf__back { background: none; border: 0; font-weight: 600; min-height: 44px; padding: 0.4rem 0; text-decoration: underline; text-underline-offset: 4px; }
+  .lf__status { padding: 0.9rem 1rem; border-radius: var(--r-field); font-weight: 600; font-size: var(--t-sm); }
+  .lf__status--error { background: #fdecea; color: var(--danger); }
+  .lf__privacy { display: flex; gap: 0.5rem; align-items: flex-start; font-size: 0.8125rem; color: var(--slate); line-height: 1.5; }
   .lf__privacy :global(svg) { flex: none; margin-top: 2px; }
-  .lf__privacy a { color: var(--ink); font-weight: 600; }
+  .lf__privacy a { color: var(--black); font-weight: 600; }
 
-  .lf-off { display: grid; gap: 0.9rem; justify-items: start; }
-  .lf-off__icon { width: 56px; height: 56px; display: grid; place-items: center; border-radius: 50%; background: var(--orange-50); color: var(--orange-ink); }
-  .lf-off h3 { font-size: var(--fs-h3); }
-  .lf-off p { color: var(--ink-soft); }
-  .lf-off__links { display: grid; gap: 0.6rem; width: 100%; margin-top: 0.5rem; }
+  .lf-off { display: grid; gap: 1rem; }
+  .lf-off__icon { display: none; }
+  .lf-off h3 { font-family: var(--display); font-weight: 700; font-size: var(--d-sm); line-height: 1; }
+  .lf-off p { color: var(--slate); }
+  .lf-off__links { display: grid; gap: 0.6rem; margin-top: 0.5rem; }
 
   @media (min-width: 600px) { .lf__row { grid-template-columns: 1fr 1fr; } }
-  @media (min-width: 1024px) { .lead__layout { grid-template-columns: 0.95fr 1.05fr; gap: 4rem; } .lead__copy { position: sticky; top: calc(var(--header-h) + 3rem); } }
-  @media (max-width: 480px) { .lead__card { box-shadow: 6px 6px 0 var(--ink); } }
+  @media (min-width: 1024px) { .lead__layout { grid-template-columns: 1fr 1fr; gap: 5rem; } .lead__copy { position: sticky; top: calc(var(--header-h) + 3rem); } }
 </style>

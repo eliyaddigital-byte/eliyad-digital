@@ -3,7 +3,7 @@ const esc = (s: string) =>
 
 /** ממיר [[טקסט]] להדגשת מרקר. כל השאר עובר escaping. */
 export function mark(s: string): string {
-  return esc(s).replace(/\[\[(.+?)\]\]/g, '<span class="mark">$1</span>');
+  return esc(s).replace(/\[\[(.+?)\]\]/g, '$1');
 }
 /** טקסט נקי (ללא סימוני [[ ]]) – ל-meta ו-schema */
 export function plain(s: string): string {

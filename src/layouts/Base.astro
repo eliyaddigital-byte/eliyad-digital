@@ -1,5 +1,7 @@
 ---
-import '@fontsource-variable/rubik/wght.css';
+import '@fontsource/karantina/700.css';
+import '@fontsource/ibm-plex-sans-hebrew/400.css';
+import '@fontsource/ibm-plex-sans-hebrew/600.css';
 import '../styles/global.css';
 import { site, whatsappUrl, telUrl, mailUrl } from '../config/site';
 import ConsentBanner from '../components/ConsentBanner.astro';
@@ -76,7 +78,7 @@ void whatsappUrl; void telUrl; void mailUrl;
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex, follow" />}
-    <meta name="theme-color" content="#f7f4ee" />
+    <meta name="theme-color" content="#f37a1f" />
     <meta name="format-detection" content="telephone=no" />
     {site.analytics.googleSiteVerification && <meta name="google-site-verification" content={site.analytics.googleSiteVerification} />}
 

@@ -3,18 +3,6 @@
  */
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* Reveal on scroll */
-const revealEls = document.querySelectorAll<HTMLElement>('[data-reveal]');
-if (reduce || !('IntersectionObserver' in window)) {
-  revealEls.forEach((el) => el.classList.add('is-in'));
-} else {
-  const io = new IntersectionObserver(
-    (entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } }),
-    { rootMargin: '0px 0px -8% 0px', threshold: 0.12 },
-  );
-  revealEls.forEach((el) => io.observe(el));
-}
-
 /* Header shadow on scroll + mobile CTA visibility */
 const header = document.querySelector<HTMLElement>('[data-header]');
 const mobileCta = document.querySelector<HTMLElement>('[data-mobile-cta]');

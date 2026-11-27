@@ -1,184 +1,189 @@
 ---
+/**
+ * Hero – "billboard" headline on the orange field + an interactive
+ * cost-per-customer calculator (the number performance marketing is really about).
+ * The calculator only computes from the visitor's own inputs – no claims, no invented data.
+ */
 import Icon from './Icon.astro';
 import { hero } from '../content/home';
-import { site } from '../config/site';
-import { mark } from '../lib/text';
+import { site, whatsappUrl, telUrl, leadFormActive } from '../config/site';
+import { plain } from '../lib/text';
 const variants = Object.entries(hero.headlines);
+const waBase = site.contact.whatsapp ? `https://wa.me/${site.contact.whatsapp}` : '';
 ---
 <section class="hero" id="top" data-hero data-section="hero" aria-labelledby="hero-title">
-  <div class="hero__grid-bg" aria-hidden="true"></div>
-  <div class="container hero__wrap">
+  <div class="wrap hero__grid">
     <div class="hero__copy">
-      <p class="eyebrow hero__eyebrow">{hero.eyebrow}</p>
-      <h1 id="hero-title" class="hero__title" data-experiment="hero_headline">
-        {variants.map(([key, text], i) => (
-          <span data-variant={key} hidden={i !== 0} set:html={mark(text)} />
-        ))}
-      </h1>
-      <p class="hero__sub">{hero.subheadline}</p>
-      <ul class="hero__bullets" role="list">
-        {hero.bullets.map((b) => (
-          <li><span class="hero__tick"><Icon name="check" size={16} stroke={3} /></span>{b}</li>
-        ))}
-      </ul>
-      <div class="hero__ctas">
-        <a class="btn btn--primary btn--lg" href="#contact" data-cta="hero-primary">
-          {site.cta.primary}
-          <Icon name="arrow-left" size={20} class="btn__arrow" />
-        </a>
-        <a class="btn btn--ghost btn--lg" href="#process" data-cta="hero-secondary">{site.cta.secondary}</a>
-      </div>
-      <p class="hero__micro"><Icon name="shield" size={18} /> {hero.microcopy}</p>
-    </div>
-
-    <div class="hero__visual" aria-hidden="true">
-      <div class="hv">
-        <div class="hv__dot"></div>
-        <div class="hv__card hv__board">
-          <div class="hv__board-head">
-            <span class="hv__label">מהמודעה ועד העסקה</span>
-            <span class="hv__live"><i></i>מדידה פעילה</span>
-          </div>
-          <svg class="hv__chart" viewBox="0 0 320 150" preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="hvFill" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0" stop-color="#f37a1f" stop-opacity=".28" />
-                <stop offset="1" stop-color="#f37a1f" stop-opacity="0" />
-              </linearGradient>
-            </defs>
-            <g class="hv__gridlines" stroke="#e7e0d3" stroke-width="1">
-              <line x1="0" y1="30" x2="320" y2="30" /><line x1="0" y1="70" x2="320" y2="70" /><line x1="0" y1="110" x2="320" y2="110" />
-            </g>
-            <path class="hv__area" d="M0 128 C40 124 60 118 90 112 S140 96 170 88 S220 60 250 48 S300 22 320 14 V150 H0Z" fill="url(#hvFill)" />
-            <path class="hv__line" d="M0 128 C40 124 60 118 90 112 S140 96 170 88 S220 60 250 48 S300 22 320 14" fill="none" stroke="#0f0f0f" stroke-width="3.5" stroke-linecap="round" pathLength="1" />
-            <circle class="hv__end" cx="316" cy="15" r="7" fill="#f37a1f" stroke="#0f0f0f" stroke-width="3" />
-          </svg>
-          <div class="hv__funnel">
-            <div class="hv__stage" style="--w:100%"><span>חשיפות</span></div>
-            <div class="hv__stage" style="--w:78%"><span>קליקים</span></div>
-            <div class="hv__stage" style="--w:56%"><span>לידים</span></div>
-            <div class="hv__stage hv__stage--win" style="--w:38%"><span>לקוחות</span></div>
-          </div>
-        </div>
-
-        <div class="hv__card hv__toast">
-          <span class="hv__toast-icon"><Icon name="zap" size={18} /></span>
-          <span>
-            <strong>ליד חדש התקבל</strong>
-            <small>מקור, קמפיין ומודעה נשמרו ב-CRM</small>
+    <h1 id="hero-title" class="hero__title display" data-experiment="hero_headline">
+      {variants.map(([key, text], i) => {
+        const lines = plain(text).split(/(?<=\.)\s+/);
+        return (
+          <span data-variant={key} hidden={i !== 0}>
+            {lines.map((l, j) => <span class="hero__line" style={`--d:${j * 110}ms`}>{l}</span>)}
           </span>
+        );
+      })}
+    </h1>
+        <p class="hero__sub">{hero.subheadline}</p>
+        <div class="hero__ctas">
+          {whatsappUrl ? (
+            <a class="btn btn--black btn--lg" href={whatsappUrl} target="_blank" rel="noopener" data-cta="hero-whatsapp"><Icon name="whatsapp" size={22} />שליחת הודעה בוואטסאפ</a>
+          ) : (
+            <a class="btn btn--black btn--lg" href="#contact" data-cta="hero-primary">{site.cta.primary}</a>
+          )}
+          {leadFormActive || !telUrl ? (
+            <a class="btn btn--outline btn--lg" href="#contact" data-cta="hero-secondary">קביעת שיחת אבחון</a>
+          ) : (
+            <a class="btn btn--outline btn--lg" href={telUrl} data-cta="hero-phone"><Icon name="phone" size={20} /><span dir="ltr">{site.contact.phone}</span></a>
+          )}
         </div>
-
-        <div class="hv__chips">
-          <span class="hv__chip">Google Ads</span>
-          <span class="hv__chip">Meta</span>
-          <span class="hv__chip">GA4</span>
-          <span class="hv__chip hv__chip--ink">CRM</span>
-        </div>
-
-        <div class="hv__card hv__kpi">
-          <span class="hv__kpi-label">המדד שחשוב באמת</span>
-          <span class="hv__kpi-value">עלות ללקוח</span>
-          <span class="hv__kpi-arrow"><Icon name="trending-up" size={20} stroke={2.5} /></span>
-        </div>
-        <span class="hv__note">המחשה</span>
+        <ul class="hero__points" role="list">
+          {hero.bullets.map((b) => <li><Icon name="check" size={18} stroke={3} />{b}</li>)}
+        </ul>
       </div>
-    </div>
+
+      <form class="calc" data-calc data-wa={waBase} aria-labelledby="calc-title" onsubmit="return false">
+        <h2 id="calc-title" class="calc__title">כמה עולה לך לקוח חדש?</h2>
+        <p class="calc__hint">הזיזו את הסמנים לפי המספרים של העסק שלכם.</p>
+
+        <div class="calc__row">
+          <label for="calc-budget">תקציב פרסום בחודש</label>
+          <output for="calc-budget" data-out="budget">10,000 ₪</output>
+          <input id="calc-budget" type="range" min="1000" max="100000" step="500" value="10000" data-in="budget" />
+        </div>
+        <div class="calc__row">
+          <label for="calc-leads">פניות (לידים) בחודש</label>
+          <output for="calc-leads" data-out="leads">80</output>
+          <input id="calc-leads" type="range" min="5" max="1000" step="5" value="80" data-in="leads" />
+        </div>
+        <div class="calc__row">
+          <label for="calc-close">מתוכן הופכות ללקוחות</label>
+          <output for="calc-close" data-out="close">10%</output>
+          <input id="calc-close" type="range" min="1" max="60" step="1" value="10" data-in="close" />
+        </div>
+
+        <dl class="calc__results" aria-live="polite">
+          <div><dt>עלות לליד</dt><dd data-res="cpl">125 ₪</dd></div>
+          <div><dt>לקוחות בחודש</dt><dd data-res="customers">8</dd></div>
+          <div class="calc__main"><dt>עלות ללקוח</dt><dd data-res="cpa">1,250 ₪</dd></div>
+        </dl>
+        <p class="calc__insight" data-res="insight">אם עוד 2% מהפניות ייסגרו, העלות ללקוח תרד ל-1,042 ₪ באותו תקציב.</p>
+        {waBase && (
+          <a class="btn btn--orange btn--block" href={whatsappUrl} target="_blank" rel="noopener" data-calc-wa data-cta="calc-whatsapp">
+            <Icon name="whatsapp" size={20} />שליחת המספרים אלינו לבדיקה
+          </a>
+        )}
+      </form>
   </div>
 </section>
 
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-calc]');
+  if (form) {
+    const nf = new Intl.NumberFormat('he-IL', { maximumFractionDigits: 0 });
+    const ils = (n: number) => `${nf.format(Math.round(n))} ₪`;
+    const get = (k: string) => Number(form.querySelector<HTMLInputElement>(`[data-in="${k}"]`)!.value);
+    const out = (k: string, v: string) => { form.querySelector(`[data-out="${k}"]`)!.textContent = v; };
+    const res = (k: string) => form.querySelector<HTMLElement>(`[data-res="${k}"]`)!;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let shown = 1250;
+    let raf = 0;
+    let interacted = false;
+    const wa = form.querySelector<HTMLAnchorElement>('[data-calc-wa]');
+
+    const tween = (to: number) => {
+      cancelAnimationFrame(raf);
+      if (reduce) { shown = to; res('cpa').textContent = ils(to); return; }
+      const from = shown; const t0 = performance.now();
+      const step = (t: number) => {
+        const p = Math.min(1, (t - t0) / 320);
+        shown = from + (to - from) * (1 - (1 - p) ** 3);
+        res('cpa').textContent = ils(shown);
+        if (p < 1) raf = requestAnimationFrame(step);
+      };
+      raf = requestAnimationFrame(step);
+    };
+
+    const paintTrack = (el: HTMLInputElement) => {
+      const p = ((Number(el.value) - Number(el.min)) / (Number(el.max) - Number(el.min))) * 100;
+      el.style.setProperty('--p', `${p}%`);
+    };
+
+    const update = () => {
+      const budget = get('budget'), leads = get('leads'), close = get('close');
+      out('budget', ils(budget)); out('leads', nf.format(leads)); out('close', `${close}%`);
+      const customers = (leads * close) / 100;
+      const cpl = budget / leads;
+      const cpa = customers > 0 ? budget / customers : 0;
+      res('cpl').textContent = ils(cpl);
+      res('customers').textContent = customers >= 10 ? nf.format(customers) : customers.toFixed(1).replace(/\.0$/, '');
+      tween(cpa);
+      const better = Math.min(close + 2, 100);
+      const cpaBetter = budget / ((leads * better) / 100);
+      res('insight').textContent = `אם עוד 2% מהפניות ייסגרו, העלות ללקוח תרד ל-${ils(cpaBetter)} באותו תקציב.`;
+      if (wa && form.dataset.wa) {
+        const msg = `היי BoostRize, עשיתי חישוב באתר: תקציב פרסום ${ils(budget)} בחודש, ${nf.format(leads)} פניות, ${close}% נסגרות. עלות ללקוח: ${ils(cpa)}. אשמח לבדוק איך משפרים את זה.`;
+        wa.href = `${form.dataset.wa}?text=${encodeURIComponent(msg)}`;
+      }
+      form.querySelectorAll<HTMLInputElement>('input[type=range]').forEach(paintTrack);
+    };
+    form.addEventListener('input', () => {
+      update();
+      if (!interacted) { interacted = true; window.__brTrack?.('calculator_use', { form_id: 'cpa_calculator' }); }
+    });
+    update();
+  }
+</script>
+
 <style>
-  .hero { position: relative; padding-block: clamp(2rem, 1rem + 3vw, 3.75rem) clamp(4rem, 2rem + 6vw, 7rem); overflow: hidden; }
-  .hero__grid-bg {
-    position: absolute; inset: 0; pointer-events: none;
-    background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
-    background-size: 56px 56px; opacity: 0.45;
-    mask-image: radial-gradient(ellipse 70% 60% at 30% 40%, #000 20%, transparent 75%);
+  .hero { background: var(--orange); padding-block: clamp(1.5rem, 1rem + 2vw, 3rem) clamp(3.5rem, 2rem + 5vw, 6.5rem); }
+  .hero__title { font-size: var(--d-xl); }
+  .hero__title > span[hidden] { display: none; }
+  .hero__title > span { display: block; }
+  .hero__line { display: block; animation: lineIn 760ms var(--ease) both; animation-delay: var(--d); }
+  @keyframes lineIn { from { opacity: 0; transform: translateY(0.35em); } }
+
+  .hero__grid { display: grid; gap: clamp(2.5rem, 4vw, 4.5rem); align-items: center; }
+  .hero__copy { display: grid; align-content: center; }
+  .hero__sub { margin-top: 1.75rem; font-size: clamp(1.2rem, 1.05rem + 0.6vw, 1.5rem); line-height: 1.5; max-width: 34ch; }
+  .hero__ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
+  .hero__points { display: grid; gap: 0.6rem; margin-top: 2.25rem; font-weight: 500; }
+  .hero__points li { display: flex; gap: 0.6rem; align-items: center; }
+
+  /* Calculator panel */
+  .calc { background: var(--black); color: var(--white); border-radius: var(--r-panel); padding: clamp(1.5rem, 1rem + 2vw, 2.5rem); display: grid; gap: 1.1rem; animation: panelIn 900ms var(--ease) 280ms both; }
+  @keyframes panelIn { from { opacity: 0; transform: translateY(24px); } }
+  .calc__title { font-family: var(--display); font-weight: 700; font-size: var(--d-sm); line-height: 1; }
+  .calc__hint { color: #a9afb7; font-size: var(--t-sm); margin-top: -0.5rem; }
+  .calc__row { display: grid; grid-template-columns: 1fr auto; gap: 0.35rem 1rem; align-items: baseline; }
+  .calc__row label { font-size: var(--t-sm); color: #d4d8dd; }
+  .calc__row output { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .calc__row input { grid-column: 1 / -1; }
+
+  .calc input[type='range'] {
+    --p: 50%;
+    -webkit-appearance: none; appearance: none; width: 100%; height: 28px; background: transparent; margin: 0;
   }
-  .hero__wrap { position: relative; display: grid; gap: clamp(2.5rem, 4vw, 4rem); align-items: center; }
-  .hero__title { font-size: var(--fs-h1); font-weight: 900; letter-spacing: -0.035em; line-height: 1.02; }
-  .hero__title :global(.mark) { white-space: normal; }
-  .hero__sub { margin-top: 1.25rem; font-size: var(--fs-lg); line-height: 1.5; color: var(--ink-2); max-width: 36rem; font-weight: 400; }
-  .hero__bullets { margin-top: 1.4rem; display: grid; gap: 0.7rem; }
-  .hero__bullets li { display: flex; align-items: center; gap: 0.7rem; font-weight: 500; }
-  .hero__tick { width: 26px; height: 26px; flex: none; display: grid; place-items: center; background: var(--ink); color: var(--orange); border-radius: 50%; }
-  .hero__ctas { margin-top: 1.9rem; display: flex; flex-wrap: wrap; gap: 0.9rem; }
-  .hero__micro { margin-top: 1.1rem; display: flex; align-items: center; gap: 0.5rem; color: var(--ink-soft); font-size: var(--fs-sm); }
-  .hero__micro :global(svg) { color: var(--orange-ink); flex: none; }
+  .calc input[type='range']::-webkit-slider-runnable-track { height: 6px; border-radius: 6px; background: linear-gradient(to left, var(--orange) var(--p), #3a3a3a var(--p)); }
+  .calc input[type='range']::-moz-range-track { height: 6px; border-radius: 6px; background: #3a3a3a; }
+  .calc input[type='range']::-moz-range-progress { height: 6px; border-radius: 6px; background: var(--orange); }
+  .calc input[type='range']::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: var(--white); border: 4px solid var(--orange); margin-top: -9px; }
+  .calc input[type='range']::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: var(--white); border: 4px solid var(--orange); }
+  .calc input[type='range']:focus-visible { outline: 2px solid var(--white); outline-offset: 4px; box-shadow: none; }
 
-  /* Entrance */
-  .hero__copy > * { animation: heroIn 900ms var(--ease-out) both; }
-  .hero__copy > :nth-child(2) { animation-delay: 80ms; }
-  .hero__copy > :nth-child(3) { animation-delay: 160ms; }
-  .hero__copy > :nth-child(4) { animation-delay: 240ms; }
-  .hero__copy > :nth-child(5) { animation-delay: 320ms; }
-  .hero__copy > :nth-child(6) { animation-delay: 400ms; }
-  @keyframes heroIn { from { opacity: 0; transform: translateY(24px); } }
-  .hero__title :global(.mark::after) { animation: markIn 900ms var(--ease-out) 650ms both; }
-  @keyframes markIn { from { transform: scaleX(0); } }
+  .calc__results { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: #2e2e2e; border-radius: 12px; overflow: hidden; margin-top: 0.4rem; }
+  .calc__results > div { background: #141414; padding: 0.9rem 1rem; }
+  .calc__results dt { font-size: var(--t-sm); color: #a9afb7; }
+  .calc__results dd { font-weight: 600; font-size: var(--t-md); font-variant-numeric: tabular-nums; }
+  .calc__main { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+  .calc__main dt { font-size: var(--t-base); color: var(--white); font-weight: 600; }
+  .calc__main dd { font-family: var(--display); font-size: clamp(3rem, 2.4rem + 2.6vw, 4.5rem); line-height: 1; color: var(--orange); }
+  .calc__insight { font-size: var(--t-sm); color: #d4d8dd; }
 
-  /* ---------- Visual ---------- */
-  .hero__visual { position: relative; }
-  .hv { position: relative; max-width: 540px; margin-inline: auto; padding: 2.5rem 0 3rem; }
-  .hv__dot {
-    position: absolute; width: 58%; aspect-ratio: 1; border-radius: 50%; background: var(--orange);
-    inset-inline-start: -6%; top: -2%; animation: float 9s ease-in-out infinite;
+  @media (min-width: 960px) {
+    .hero__grid { grid-template-columns: 1fr minmax(380px, 470px); }
   }
-  .hv__card { position: relative; background: var(--white); border: 2px solid var(--ink); border-radius: var(--radius); box-shadow: var(--shadow-hard); }
-  .hv__board { padding: 1.25rem 1.25rem 1.4rem; margin-inline-start: 8%; animation: heroIn 1s var(--ease-out) 200ms both; }
-  .hv__board-head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 0.75rem; }
-  .hv__label { font-weight: 800; font-size: 1.05rem; }
-  .hv__live { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.78rem; font-weight: 600; color: var(--success); background: #e5f3ea; padding: 0.2rem 0.6rem; border-radius: var(--radius-pill); }
-  .hv__live i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; animation: pulse 1.8s ease-in-out infinite; }
-  .hv__chart { width: 100%; height: 150px; overflow: visible; }
-  .hv__line { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 2.2s var(--ease-out) 600ms forwards; }
-  .hv__area { opacity: 0; animation: fade 1.2s ease 1.6s forwards; }
-  .hv__end { transform-box: fill-box; transform-origin: center; transform: scale(0); animation: pop 500ms var(--ease-out) 2.5s forwards; }
-  .hv__funnel { margin-top: 1rem; display: grid; gap: 6px; }
-  .hv__stage { width: var(--w); margin-inline: auto; text-align: center; background: var(--paper-2); border-radius: 3px; padding: 0.35rem 0.7rem; font-size: 0.8rem; font-weight: 600; color: var(--ink-2);
-    transform-origin: center; animation: grow 900ms var(--ease-out) both; }
-  .hv__stage:nth-child(2) { animation-delay: 120ms; } .hv__stage:nth-child(3) { animation-delay: 240ms; } .hv__stage:nth-child(4) { animation-delay: 360ms; }
-  .hv__stage--win { background: var(--ink); color: var(--white); }
-  .hv__stage--win span::after { content: ' ←'; color: var(--orange); }
-
-  .hv__toast {
-    position: absolute; inset-inline-end: -4%; top: -1.25rem; z-index: 2; display: flex; gap: 0.7rem; align-items: center;
-    padding: 0.75rem 1rem; box-shadow: var(--shadow-hard-orange); animation: toastIn 700ms var(--ease-out) 1.4s both, float 7s ease-in-out 2.2s infinite;
-  }
-  .hv__toast strong { display: block; font-size: 0.92rem; }
-  .hv__toast small { display: block; font-size: 0.75rem; color: var(--ink-soft); }
-  .hv__toast-icon { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; background: var(--orange); color: var(--ink); flex: none; }
-
-  .hv__chips { position: absolute; inset-inline-start: 0; bottom: 0.6rem; display: flex; flex-wrap: wrap; gap: 0.4rem; max-width: 62%; }
-  .hv__chip { background: var(--paper); border: 1.5px solid var(--ink); border-radius: var(--radius-pill); padding: 0.25rem 0.75rem; font-size: 0.78rem; font-weight: 700; direction: ltr; animation: heroIn 600ms var(--ease-out) both; }
-  .hv__chip:nth-child(1) { animation-delay: 1.8s; } .hv__chip:nth-child(2) { animation-delay: 1.9s; } .hv__chip:nth-child(3) { animation-delay: 2s; } .hv__chip:nth-child(4) { animation-delay: 2.1s; }
-  .hv__chip--ink { background: var(--ink); color: var(--white); }
-  .hv__kpi {
-    position: absolute; inset-inline-end: 0; bottom: -0.5rem; padding: 0.8rem 1rem; display: grid; grid-template-columns: auto auto; column-gap: 0.75rem; align-items: center;
-    background: var(--ink); color: var(--white); box-shadow: var(--shadow-hard-orange); animation: heroIn 700ms var(--ease-out) 2.2s both;
-  }
-  .hv__kpi-label { grid-column: 1; font-size: 0.72rem; color: #bdb7ab; }
-  .hv__kpi-value { grid-column: 1; font-weight: 800; font-size: 1.15rem; }
-  .hv__kpi-arrow { grid-column: 2; grid-row: 1 / span 2; width: 38px; height: 38px; display: grid; place-items: center; border-radius: 50%; background: var(--orange); color: var(--ink); transform: scaleX(-1); }
-  .hv__note { position: absolute; inset-inline-start: 0; bottom: -1.75rem; font-size: 0.72rem; color: var(--ink-soft); background: var(--paper); padding: 0 0.4rem; }
-
-  @keyframes draw { to { stroke-dashoffset: 0; } }
-  @keyframes fade { to { opacity: 1; } }
-  @keyframes pop { to { transform: scale(1); } }
-  @keyframes grow { from { transform: scaleX(0.2); opacity: 0; } }
-  @keyframes toastIn { from { opacity: 0; transform: translateY(-16px) scale(0.96); } }
-  @keyframes float { 50% { translate: 0 -10px; } }
-  @keyframes pulse { 50% { opacity: 0.35; } }
-
-  @media (min-width: 1024px) {
-    .hero__wrap { grid-template-columns: 1.08fr 0.92fr; }
-  }
-  @media (max-width: 599px) {
+  @media (max-width: 600px) {
     .hero__ctas .btn { width: 100%; }
-    .hv { padding-top: 3.5rem; }
-    .hv__board { margin-inline-start: 0; }
-    .hv__toast { inset-inline-end: 0; }
-    .hv__chips { position: static; margin-top: 1.1rem; max-width: none; }
-    .hv__kpi { position: relative; inset: auto; margin-top: 0.9rem; width: fit-content; margin-inline-start: auto; }
   }
 </style>

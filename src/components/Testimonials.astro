@@ -6,15 +6,14 @@ import { withBase } from '../lib/text';
 const ytId = (u: string) => u.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/)?.[1];
 ---
 {items.length > 0 && (
-  <section class="section section--tint testimonials" id="testimonials" aria-labelledby="t-title" data-section="testimonials">
-    <div class="container">
-      <div class="section-head" data-reveal>
-        <p class="eyebrow">מה הלקוחות אומרים</p>
+  <section class="band section--tint testimonials" id="testimonials" aria-labelledby="t-title" data-section="testimonials">
+    <div class="wrap">
+      <div class="section-head">
         <h2 id="t-title">לא צריך להאמין רק לנו</h2>
       </div>
       <ul class="t__grid" role="list">
         {items.map((t, i) => (
-          <li class="t" data-reveal style={`--i:${i % 3}`}>
+          <li class="t" style={`--i:${i % 3}`}>
             <blockquote>
               <span class="t__q" aria-hidden="true">”</span>
               <p>{t.quote}</p>
@@ -36,13 +35,13 @@ const ytId = (u: string) => u.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{1
 
 <style>
   .t__grid { display: grid; gap: 1.25rem; }
-  .t { display: flex; flex-direction: column; gap: 1.25rem; padding: 1.75rem; background: var(--white); border: 2px solid var(--ink); border-radius: var(--radius); }
-  .t blockquote { position: relative; font-size: var(--fs-lg); line-height: 1.55; }
+  .t { display: flex; flex-direction: column; gap: 1.25rem; padding: 1.75rem; background: var(--white); border: 2px solid var(--black); border-radius: var(--r-field); }
+  .t blockquote { position: relative; font-size: var(--t-md); line-height: 1.55; }
   .t__q { display: block; font-size: 4rem; line-height: 0.6; color: var(--orange); font-weight: 900; height: 1.6rem; }
   .t__who { margin-top: auto; display: flex; align-items: center; gap: 0.8rem; }
   .t__who img { border-radius: 50%; object-fit: cover; }
   .t__who span { display: grid; }
-  .t__who small { color: var(--ink-soft); }
+  .t__who small { color: var(--slate); }
   .t__logo { margin-inline-start: auto; border-radius: 0 !important; object-fit: contain !important; }
   @media (min-width: 900px) { .t__grid { grid-template-columns: repeat(3, 1fr); } }
 </style>

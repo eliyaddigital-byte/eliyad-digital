@@ -1,16 +1,16 @@
 ---
 /** Sticky CTA במובייל – מופיע אחרי ה-Hero ונעלם כשסקשן יצירת הקשר על המסך */
 import Icon from './Icon.astro';
-import { site, whatsappUrl } from '../config/site';
+import { site, whatsappUrl, telUrl } from '../config/site';
 ---
 <div class="mcta" data-mobile-cta aria-hidden="true">
-  <a class="btn btn--primary mcta__main" href="#contact" data-cta="mobile-sticky" tabindex="-1">
-    {site.cta.primary} <Icon name="arrow-left" size={18} class="btn__arrow" />
-  </a>
-  {whatsappUrl && (
-    <a class="mcta__wa" href={whatsappUrl} target="_blank" rel="noopener" aria-label="וואטסאפ" data-cta-location="mobile-sticky" tabindex="-1">
-      <Icon name="whatsapp" size={24} />
-    </a>
+  {whatsappUrl ? (
+    <a class="btn btn--black mcta__main" href={whatsappUrl} target="_blank" rel="noopener" data-cta="mobile-sticky" data-cta-location="mobile-sticky" tabindex="-1"><Icon name="whatsapp" size={20} />שליחת הודעה בוואטסאפ</a>
+  ) : (
+    <a class="btn btn--black mcta__main" href="#contact" data-cta="mobile-sticky" tabindex="-1">{site.cta.primary}</a>
+  )}
+  {telUrl && (
+    <a class="mcta__icon" href={telUrl} aria-label={`חיוג ל-${site.contact.phone}`} data-cta-location="mobile-sticky" tabindex="-1"><Icon name="phone" size={22} /></a>
   )}
 </div>
 
@@ -18,12 +18,10 @@ import { site, whatsappUrl } from '../config/site';
   .mcta {
     position: fixed; z-index: 70; inset-inline: 0; bottom: 0; display: flex; gap: 0.5rem;
     padding: 0.6rem 0.75rem calc(0.6rem + env(safe-area-inset-bottom));
-    background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-    border-top: 1px solid var(--line);
-    transform: translateY(110%); transition: transform var(--dur) var(--ease-out);
+    background: var(--orange); transform: translateY(110%); transition: transform 280ms var(--ease);
   }
   .mcta:global(.is-visible) { transform: none; }
-  .mcta__main { flex: 1; min-height: 50px; }
-  .mcta__wa { width: 50px; height: 50px; flex: none; display: grid; place-items: center; border-radius: var(--radius); background: var(--ink); color: var(--white); }
+  .mcta__main { flex: 1; min-height: 52px; }
+  .mcta__icon { width: 52px; height: 52px; flex: none; display: grid; place-items: center; border-radius: 50%; background: var(--white); color: var(--black); }
   @media (min-width: 900px) { .mcta { display: none; } }
 </style>

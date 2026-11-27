@@ -12,9 +12,9 @@ const { variant = 'dark', markOnly = false, class: cls = '', size = 'md' } = Ast
 <span class:list={['logo', `logo--${variant}`, `logo--${size}`, cls]} dir="ltr">
   {!markOnly && <span class="logo__word" aria-hidden="true">Boost</span>}
   <svg class="logo__mark" viewBox="0 0 100 120" aria-hidden="true" focusable="false">
-    <path fill="var(--orange)" fill-rule="evenodd" d="M10 4H55a28 28 0 0 1 8 54.8L90 116H63L38.5 62H34v-4H10Z M34 24V40H54a8 8 0 0 0 0-16Z" />
-    <path fill="var(--orange)" d="M34 62 22 116H0l9-41-7 3L6 52l28 6-8 6Z" />
-    <circle cx="90" cy="12" r="10" fill="var(--orange)" />
+    <path fill="var(--logo-accent, var(--orange))" fill-rule="evenodd" d="M10 4H55a28 28 0 0 1 8 54.8L90 116H63L38.5 62H34v-4H10Z M34 24V40H54a8 8 0 0 0 0-16Z" />
+    <path fill="var(--logo-accent, var(--orange))" d="M34 62 22 116H0l9-41-7 3L6 52l28 6-8 6Z" />
+    <circle cx="90" cy="12" r="10" fill="var(--logo-accent, var(--orange))" />
   </svg>
   {!markOnly && <span class="logo__word" aria-hidden="true">ize</span>}
   <span class="sr-only">BoostRize</span>
@@ -23,8 +23,8 @@ const { variant = 'dark', markOnly = false, class: cls = '', size = 'md' } = Ast
 <style>
   .logo {
     display: inline-flex; align-items: flex-end; gap: 0;
-    font-family: var(--font); font-weight: 800; letter-spacing: -0.035em; line-height: 1;
-    color: var(--ink); white-space: nowrap; direction: ltr;
+    font-family: var(--text); font-weight: 700; letter-spacing: -0.04em; line-height: 1;
+    color: var(--black); white-space: nowrap; direction: ltr;
   }
   .logo--light { color: var(--white); }
   .logo--sm { font-size: 1.5rem; }

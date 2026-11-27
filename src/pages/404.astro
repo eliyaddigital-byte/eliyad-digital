@@ -8,13 +8,13 @@ import { withBase } from '../lib/text';
 <Base title="העמוד לא נמצא" description="העמוד שחיפשת לא נמצא." path="/404/" noindex>
   <Header slot="header" home={false} />
   <section class="nf">
-    <div class="container nf__wrap">
+    <div class="wrap nf__wrap">
       <p class="nf__code" aria-hidden="true">404</p>
-      <h1>הקמפיין הזה <span class="mark">לא מוביל לשום מקום</span></h1>
+      <h1>הקמפיין הזה לא מוביל לשום מקום</h1>
       <p>העמוד שחיפשת לא קיים או שהועבר. בוא נחזיר אותך למסלול.</p>
       <div class="nf__actions">
-        <a class="btn btn--primary" href={withBase('/')}>לעמוד הבית <Icon name="arrow-left" size={18} class="btn__arrow" /></a>
-        <a class="btn btn--ghost" href={`${withBase('/')}#contact`}>לתיאום שיחה</a>
+        <a class="btn btn--black" href={withBase('/')}>לעמוד הבית</a>
+        <a class="btn btn--outline" href={`${withBase('/')}#contact`}>לתיאום שיחה</a>
       </div>
     </div>
   </section>
@@ -24,8 +24,8 @@ import { withBase } from '../lib/text';
 <style>
   .nf { padding-block: clamp(3rem, 8vw, 7rem); }
   .nf__wrap { max-width: 760px; text-align: center; display: grid; justify-items: center; gap: 1.25rem; }
-  .nf__code { font-size: clamp(6rem, 22vw, 12rem); font-weight: 900; line-height: 0.9; color: var(--orange); -webkit-text-stroke: 3px var(--ink); letter-spacing: -0.05em; }
-  .nf h1 { font-size: var(--fs-h2); }
-  .nf p { font-size: var(--fs-lg); color: var(--ink-soft); }
+  .nf__code { font-size: clamp(6rem, 22vw, 12rem); font-weight: 900; line-height: 0.9; color: var(--orange); -webkit-text-stroke: 3px var(--black); letter-spacing: -0.05em; }
+  .nf h1 { font-size: var(--d-md); }
+  .nf p { font-size: var(--t-md); color: var(--slate); }
   .nf__actions { display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; }
 </style>

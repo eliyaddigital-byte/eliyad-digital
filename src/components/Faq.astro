@@ -1,35 +1,22 @@
 ---
 import Icon from './Icon.astro';
 import { faqSection } from '../content/home';
-import { mark } from '../lib/text';
-import { hasDirectContact, whatsappUrl, telUrl, mailUrl } from '../config/site';
+import { whatsappUrl, telUrl, site } from '../config/site';
 ---
-<section class="section section--tint faq" id="faq" aria-labelledby="faq-title" data-section="faq">
-  <div class="container faq__layout">
+<section class="band band--fog faq" id="faq" aria-labelledby="faq-title" data-section="faq">
+  <div class="wrap faq__layout">
     <div class="faq__intro">
-      <div class="section-head" data-reveal>
-        <p class="eyebrow">{faqSection.eyebrow}</p>
-        <h2 id="faq-title" set:html={mark(faqSection.title)} />
-        <p>לא מצאת תשובה? זו בדיוק הסיבה לשיחת האבחון.</p>
-      </div>
-      <div class="faq__cta" data-reveal>
-        <a class="btn btn--primary" href="#contact" data-cta="faq">לשאול אותנו ישירות <Icon name="arrow-left" size={18} class="btn__arrow" /></a>
-        {hasDirectContact && (
-          <div class="faq__direct">
-            {whatsappUrl && <a href={whatsappUrl} target="_blank" rel="noopener" data-cta-location="faq"><Icon name="whatsapp" size={18} /> וואטסאפ</a>}
-            {telUrl && <a href={telUrl} data-cta-location="faq"><Icon name="phone" size={18} /> טלפון</a>}
-            {mailUrl && <a href={mailUrl} data-cta-location="faq"><Icon name="mail" size={18} /> מייל</a>}
-          </div>
-        )}
+      <h2 id="faq-title" class="h-section">{faqSection.title}</h2>
+      <p class="lede">לא מצאת תשובה? שאלו אותנו ישירות.</p>
+      <div class="faq__direct">
+        {whatsappUrl && <a class="btn btn--black" href={whatsappUrl} target="_blank" rel="noopener" data-cta-location="faq"><Icon name="whatsapp" size={18} />וואטסאפ</a>}
+        {telUrl && <a class="btn btn--outline" href={telUrl} data-cta-location="faq"><Icon name="phone" size={18} /><span dir="ltr">{site.contact.phone}</span></a>}
       </div>
     </div>
     <div class="faq__list">
-      {faqSection.items.map((f, i) => (
-        <details class="qa" data-reveal style={`--i:${i % 3}`} name="faq">
-          <summary>
-            <span class="qa__q">{f.q}</span>
-            <span class="qa__icon" aria-hidden="true"><Icon name="plus" size={20} stroke={2.5} /></span>
-          </summary>
+      {faqSection.items.map((f) => (
+        <details class="qa" name="faq">
+          <summary><span class="qa__q">{f.q}</span><span class="qa__plus" aria-hidden="true"></span></summary>
           <div class="qa__a"><p>{f.a}</p></div>
         </details>
       ))}
@@ -46,23 +33,24 @@ import { hasDirectContact, whatsappUrl, telUrl, mailUrl } from '../config/site';
 </script>
 
 <style>
-  .faq__layout { display: grid; gap: 2.5rem; }
-  .faq__cta { display: grid; gap: 1rem; justify-items: start; }
-  .faq__direct { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-  .faq__direct a { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 0.9rem; min-height: 44px; border: 1.5px solid var(--ink); border-radius: var(--radius-pill); text-decoration: none; font-weight: 600; font-size: var(--fs-sm); }
-  .faq__direct a:hover { background: var(--white); }
-  .faq__list { border-top: 2px solid var(--ink); }
-  .qa { border-bottom: 1px solid #cfc7b8; }
-  .qa summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 1.25rem; padding: 1.35rem 0.25rem; cursor: pointer; font-weight: 700; font-size: var(--fs-lg); }
+  .faq__layout { display: grid; gap: 3rem; }
+  .faq__intro { display: grid; gap: 1.25rem; align-content: start; justify-items: start; }
+  .faq__direct { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.5rem; }
+  .faq__list { border-top: 3px solid var(--black); }
+  .qa { border-bottom: 1px solid #c9ced4; }
+  .qa summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; padding: 1.35rem 0; cursor: pointer; font-weight: 600; font-size: var(--t-md); }
   .qa summary::-webkit-details-marker { display: none; }
-  .qa summary:hover .qa__q { color: var(--orange-ink); }
-  .qa__icon { flex: none; width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%; border: 2px solid var(--ink); transition: transform var(--dur) var(--ease-out), background var(--dur); }
-  .qa[open] .qa__icon { transform: rotate(45deg); background: var(--orange); }
-  .qa__a { padding: 0 0.25rem 1.5rem; color: var(--ink-2); max-width: 44rem; }
-  .qa[open] .qa__a { animation: qaIn 380ms var(--ease-out); }
-  @keyframes qaIn { from { opacity: 0; transform: translateY(-6px); } }
+  .qa summary:hover .qa__q { color: var(--ember); }
+  .qa__plus { position: relative; flex: none; width: 34px; height: 34px; border-radius: 50%; background: var(--white); }
+  .qa__plus::before, .qa__plus::after { content: ''; position: absolute; inset: 16px 10px auto; height: 2px; background: var(--black); transition: transform 220ms var(--ease); }
+  .qa__plus::after { transform: rotate(90deg); }
+  .qa[open] .qa__plus { background: var(--orange); }
+  .qa[open] .qa__plus::after { transform: rotate(0deg); }
+  .qa__a { padding: 0 0 1.5rem; color: var(--slate); max-width: 62ch; }
+  .qa[open] .qa__a { animation: qaOpen 260ms var(--ease); }
+  @keyframes qaOpen { from { opacity: 0; transform: translateY(-4px); } }
   @media (min-width: 1024px) {
     .faq__layout { grid-template-columns: 0.8fr 1.2fr; gap: 5rem; }
-    .faq__intro { position: sticky; top: calc(var(--header-h) + 3rem); align-self: start; }
+    .faq__intro { position: sticky; top: calc(var(--header-h) + 3rem); }
   }
 </style>

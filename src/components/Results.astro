@@ -1,91 +1,63 @@
 ---
-import Icon from './Icon.astro';
+/**
+ * "Where measurement stops" – the funnel from ad to sale, showing what typical
+ * reports cover vs. what we measure. Case studies render here only when verified.
+ */
 import { resultsSection } from '../content/home';
 import { publishedCases } from '../content/proof';
-import { mark } from '../lib/text';
 import { withBase } from '../lib/text';
 
-function chartPath(points: { y: number }[], w = 300, h = 120) {
+const stages = ['מודעה', 'קליק', 'ליד', 'שיחת מכירה', 'לקוח משלם'];
+function chartPath(points: { y: number }[], w = 300, h = 110) {
   const max = Math.max(...points.map((p) => p.y), 1);
   const step = points.length > 1 ? w / (points.length - 1) : w;
   return points.map((p, i) => `${i === 0 ? 'M' : 'L'}${(i * step).toFixed(1)} ${(h - (p.y / max) * (h - 10)).toFixed(1)}`).join(' ');
 }
 ---
-<section class="section results" id="results" aria-labelledby="results-title" data-section="results">
-  <div class="container">
-    <div class="results__layout">
-      <div>
-        <div class="section-head" data-reveal>
-          <p class="eyebrow">{resultsSection.eyebrow}</p>
-          <h2 id="results-title" set:html={mark(resultsSection.title)} />
-          <p>{resultsSection.subtitle}</p>
-        </div>
-        <dl class="results__metrics">
-          {resultsSection.metrics.map((m, i) => (
-            <div class="metric" data-reveal style={`--i:${i}`}>
-              <dt><span class="metric__key" dir="ltr">{m.key}</span>{m.name}</dt>
-              <dd>{m.text}</dd>
-            </div>
-          ))}
-        </dl>
-      </div>
-
-      <figure class="report" data-reveal aria-label="המחשה של דוח ביצועים חודשי">
-        <div class="report__bar">
-          <span class="report__dots" aria-hidden="true"><i></i><i></i><i></i></span>
-          <span>דוח ביצועים חודשי</span>
-        </div>
-        <div class="report__body" aria-hidden="true">
-          <div class="report__kpis">
-            <div><span>תקציב</span><b class="ph"></b></div>
-            <div><span>לידים איכותיים</span><b class="ph"></b></div>
-            <div><span>לקוחות חדשים</span><b class="ph ph--o"></b></div>
-            <div><span>עלות ללקוח</span><b class="ph"></b></div>
-          </div>
-          <div class="report__chart">
-            <svg viewBox="0 0 300 130" preserveAspectRatio="none">
-              <g fill="#efeae0">
-                <rect x="6" y="70" width="26" height="60" rx="2" /><rect x="48" y="58" width="26" height="72" rx="2" /><rect x="90" y="64" width="26" height="66" rx="2" />
-                <rect x="132" y="46" width="26" height="84" rx="2" /><rect x="174" y="40" width="26" height="90" rx="2" /><rect x="216" y="28" width="26" height="102" rx="2" /><rect x="258" y="18" width="26" height="112" rx="2" />
-              </g>
-              <path class="report__line" d="M19 100 L61 92 L103 88 L145 70 L187 60 L229 44 L271 26" fill="none" stroke="#f37a1f" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" pathLength="1" />
-              <g fill="#0f0f0f"><circle cx="271" cy="26" r="5" /></g>
-            </svg>
-            <div class="report__legend"><span><i class="lg lg--bar"></i>לידים</span><span><i class="lg lg--line"></i>לקוחות</span></div>
-          </div>
-          <div class="report__table">
-            <div class="report__row report__row--head"><span>ערוץ</span><span>לידים</span><span>איכות</span><span>מכירות</span></div>
-            <div class="report__row"><span dir="ltr">Google Ads</span><b class="ph"></b><b class="ph ph--s"></b><b class="ph ph--s"></b></div>
-            <div class="report__row"><span dir="ltr">Meta Ads</span><b class="ph"></b><b class="ph ph--s"></b><b class="ph ph--s"></b></div>
-            <div class="report__row"><span dir="ltr">TikTok Ads</span><b class="ph"></b><b class="ph ph--s"></b><b class="ph ph--s"></b></div>
-          </div>
-        </div>
-        <figcaption class="report__note"><Icon name="eye" size={16} /> {resultsSection.illustrationNote}</figcaption>
-      </figure>
+<section class="band band--fog measure" id="results" aria-labelledby="measure-title" data-section="results">
+  <div class="wrap">
+    <div class="section-intro">
+      <h2 id="measure-title" class="h-section">{resultsSection.title}</h2>
+      <p class="lede">{resultsSection.subtitle}</p>
     </div>
+
+    <figure class="funnel" aria-label="שלבי הדרך מהמודעה ללקוח, ומה נמדד בכל שלב">
+      <ol class="funnel__stages" role="list">
+        {stages.map((s, i) => <li class:list={{ 'is-end': i === stages.length - 1 }}><span>{s}</span></li>)}
+      </ol>
+      <div class="funnel__brackets">
+        <p class="funnel__b funnel__b--typical"><span>מה שרוב הדוחות מראים</span><small> מודעה, קליק וליד</small></p>
+        <p class="funnel__b funnel__b--ours"><span>מה שאנחנו מודדים ומשפרים</span><small> כל הדרך עד הלקוח המשלם</small></p>
+      </div>
+    </figure>
+
+    <dl class="metrics">
+      {resultsSection.metrics.map((m) => (
+        <div>
+          <dt><span dir="ltr">{m.key}</span> {m.name}</dt>
+          <dd>{m.text}</dd>
+        </div>
+      ))}
+    </dl>
 
     {publishedCases.length > 0 && (
       <div class="cases">
-        <h3 class="cases__title">סיפורי הצלחה</h3>
+        <h3 class="cases__title">תוצאות של לקוחות</h3>
         <div class="cases__grid">
           {publishedCases.map((c) => (
-            <article class="case" data-reveal>
-              <header class="case__head">
+            <article class="case">
+              <header>
                 {c.logo && <img src={withBase(c.logo)} alt={c.client} width="120" height="40" loading="lazy" decoding="async" />}
-                <div>
-                  <p class="case__industry">{c.industry}</p>
-                  <h4>{c.client}</h4>
-                  {(c.period || c.budget) && <p class="case__meta">{[c.period, c.budget && `תקציב: ${c.budget}`].filter(Boolean).join(' · ')}</p>}
-                </div>
+                <p class="case__industry">{c.industry}</p>
+                <h4>{c.client}</h4>
+                {(c.period || c.budget) && <p class="case__meta">{[c.period, c.budget && `תקציב: ${c.budget}`].filter(Boolean).join(', ')}</p>}
               </header>
               <dl class="case__metrics">
-                {c.metrics.map((m) => (
-                  <div><dt dir="auto">{m.label}</dt><dd>{m.before && <s>{m.before}</s>} <b>{m.after}</b></dd></div>
-                ))}
+                {c.metrics.map((m) => <div><dt dir="auto">{m.label}</dt><dd>{m.before && <s>{m.before}</s>} <b>{m.after}</b></dd></div>)}
               </dl>
               {c.chart && c.chart.points.length > 1 && (
                 <figure class="case__chart">
-                  <svg viewBox="0 0 300 120" role="img" aria-label={`${c.chart.label}: ${c.chart.points.map((p) => `${p.x} ${p.y}`).join(', ')}`}>
+                  <svg viewBox="0 0 300 110" role="img" aria-label={`${c.chart.label}: ${c.chart.points.map((p) => `${p.x} ${p.y}`).join(', ')}`}>
                     <path d={chartPath(c.chart.points)} fill="none" stroke="#f37a1f" stroke-width="3" stroke-linecap="round" />
                   </svg>
                   <figcaption>{c.chart.label}</figcaption>
@@ -103,57 +75,57 @@ function chartPath(points: { y: number }[], w = 300, h = 120) {
 </section>
 
 <style>
-  .results__layout { display: grid; gap: clamp(2.5rem, 4vw, 4.5rem); align-items: center; }
-  .results__metrics { display: grid; gap: 0; border-top: 2px solid var(--ink); }
-  .metric { display: grid; gap: 0.25rem; padding: 1.1rem 0; border-bottom: 1px solid var(--line); }
-  .metric dt { display: flex; align-items: baseline; gap: 0.75rem; font-weight: 800; font-size: var(--fs-lg); }
-  .metric__key { min-width: 4.2rem; font-size: 0.85rem; font-weight: 800; color: var(--ink); background: var(--orange); padding: 0.15rem 0.5rem; border-radius: var(--radius-sm); text-align: center; }
-  .metric dd { color: var(--ink-soft); padding-inline-start: 5rem; }
+  .funnel { margin: 0; }
+  .funnel__stages { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; }
+  .funnel__stages li { position: relative; padding-block: 1.1rem; text-align: center; font-weight: 600; }
+  .funnel__stages li span { position: relative; z-index: 1; display: inline-block; background: var(--white); border: 2px solid var(--black); border-radius: var(--r-pill); padding: 0.7rem 1.4rem; white-space: nowrap; font-size: var(--t-md); }
+  .funnel__stages li::before { content: ''; position: absolute; top: 50%; inset-inline: 0; height: 2px; background: var(--black); }
+  .funnel__stages li:first-child::before { inset-inline-start: 50%; }
+  .funnel__stages li:last-child::before { inset-inline-end: 50%; }
+  .funnel__stages li.is-end span { background: var(--orange); }
 
-  .report { background: var(--white); border: 2px solid var(--ink); border-radius: var(--radius); box-shadow: 10px 10px 0 var(--ink); overflow: hidden; }
-  .report__bar { display: flex; align-items: center; gap: 0.8rem; padding: 0.7rem 1rem; background: var(--ink); color: var(--white); font-weight: 700; font-size: var(--fs-sm); }
-  .report__dots { display: flex; gap: 5px; }
-  .report__dots i { width: 9px; height: 9px; border-radius: 50%; background: #555; }
-  .report__dots i:first-child { background: var(--orange); }
-  .report__body { padding: 1.25rem; display: grid; gap: 1.25rem; }
-  .report__kpis { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.6rem; }
-  .report__kpis div { border: 1.5px solid var(--line); border-radius: var(--radius-sm); padding: 0.6rem 0.75rem; display: grid; gap: 0.45rem; }
-  .report__kpis span { font-size: 0.78rem; color: var(--ink-soft); font-weight: 600; }
-  .ph { display: block; height: 14px; width: 70%; border-radius: 3px; background: linear-gradient(90deg, #ece6da, #f6f2ea, #ece6da); background-size: 200% 100%; animation: shimmer 2.4s linear infinite; }
-  .ph--o { background: var(--orange-100); }
-  .ph--s { width: 45%; }
-  .report__chart svg { width: 100%; height: 130px; }
-  .report__line { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.8s var(--ease-out) 300ms; }
-  .report.is-in .report__line { stroke-dashoffset: 0; }
-  .report__legend { display: flex; gap: 1rem; font-size: 0.75rem; color: var(--ink-soft); margin-top: 0.4rem; }
-  .lg { display: inline-block; width: 12px; height: 8px; margin-inline-end: 0.35rem; border-radius: 2px; }
-  .lg--bar { background: #e2dccf; } .lg--line { background: var(--orange); height: 3px; vertical-align: middle; }
-  .report__table { display: grid; font-size: 0.82rem; }
-  .report__row { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 0.6rem; align-items: center; padding: 0.55rem 0; border-bottom: 1px solid var(--line); }
-  .report__row--head { font-weight: 700; color: var(--ink-soft); font-size: 0.75rem; }
-  .report__row span[dir='ltr'] { text-align: right; font-weight: 600; }
-  .report__note { display: flex; align-items: center; gap: 0.45rem; padding: 0.7rem 1.25rem; font-size: 0.78rem; color: var(--ink-soft); background: var(--paper); border-top: 1px solid var(--line); }
-  @keyframes shimmer { to { background-position: -200% 0; } }
+  .funnel__brackets { display: grid; grid-template-columns: repeat(5, 1fr); row-gap: 0.75rem; margin-top: 0.5rem; }
+  .funnel__b { position: relative; padding-top: 1.1rem; font-size: var(--t-md); font-weight: 600; text-align: center; }
+  .funnel__b::before { content: ''; position: absolute; top: 0; inset-inline: 10%; height: 0.6rem; border: 2px solid currentColor; border-top: 0; border-radius: 0 0 8px 8px; }
+  .funnel__b--typical { grid-column: 1 / span 3; color: var(--slate); }
+  .funnel__b--ours { grid-column: 1 / span 5; color: var(--black); }
+  .funnel__b--ours span { background: var(--orange); padding: 0.2rem 0.8rem; border-radius: var(--r-pill); }
+  .funnel__b--ours::before { color: var(--orange); }
+  .funnel__b--ours::before { border-width: 3px; }
+
+  .metrics { display: grid; gap: 0; margin-top: clamp(3rem, 2rem + 3vw, 5rem); border-top: 3px solid var(--black); }
+  .metrics > div { padding: 1.25rem 0; border-bottom: 1px solid var(--line); display: grid; gap: 0.2rem; }
+  .metrics dt { font-weight: 600; font-size: var(--t-md); }
+  .metrics dt span { color: var(--ember); }
+  .metrics dd { color: var(--slate); }
 
   .cases { margin-top: clamp(3rem, 5vw, 5rem); }
-  .cases__title { font-size: var(--fs-h3); margin-bottom: 1.25rem; }
+  .cases__title { font-family: var(--display); font-size: var(--d-sm); margin-bottom: 1.5rem; }
   .cases__grid { display: grid; gap: 1.25rem; }
-  .case { background: var(--white); border: 2px solid var(--ink); border-radius: var(--radius); padding: 1.5rem; display: grid; gap: 0.85rem; }
-  .case__industry { font-size: var(--fs-xs); font-weight: 700; color: var(--orange-ink); }
-  .case__meta { font-size: var(--fs-xs); color: var(--ink-soft); }
+  .case { background: var(--white); border-radius: var(--r-panel); padding: 1.75rem; display: grid; gap: 0.85rem; }
+  .case__industry { font-size: var(--t-sm); font-weight: 600; color: var(--ember); }
+  .case h4 { font-size: var(--t-lg); }
+  .case__meta { font-size: var(--t-sm); color: var(--slate); }
   .case__metrics { display: flex; flex-wrap: wrap; gap: 0.6rem; }
-  .case__metrics div { background: var(--paper); border-radius: var(--radius-sm); padding: 0.5rem 0.8rem; }
-  .case__metrics dt { font-size: 0.75rem; color: var(--ink-soft); font-weight: 700; }
-  .case__metrics dd b { font-size: 1.25rem; }
-  .case__metrics s { color: var(--ink-soft); font-size: 0.85rem; }
+  .case__metrics div { background: var(--fog); border-radius: var(--r-field); padding: 0.5rem 0.8rem; }
+  .case__metrics dt { font-size: var(--t-sm); color: var(--slate); }
+  .case__metrics b { font-size: var(--t-lg); }
   .case__chart svg { width: 100%; height: 100px; }
-  .case__chart figcaption { font-size: 0.75rem; color: var(--ink-soft); }
-  .case__outcome { font-weight: 700; border-inline-start: 4px solid var(--orange); padding-inline-start: 0.75rem; }
+  .case__chart figcaption { font-size: var(--t-sm); color: var(--slate); }
+  .case__outcome { font-weight: 600; }
 
-  @media (min-width: 1024px) {
-    .results__layout { grid-template-columns: 0.95fr 1.05fr; }
-    .cases__grid { grid-template-columns: repeat(2, 1fr); }
+  @media (min-width: 720px) { .metrics { grid-template-columns: repeat(2, 1fr); column-gap: 3rem; } }
+  @media (min-width: 1100px) { .metrics { grid-template-columns: repeat(4, 1fr); } .metrics > div { border-bottom: 0; } .cases__grid { grid-template-columns: repeat(2, 1fr); } }
+  .funnel__b small { display: none; }
+  @media (max-width: 719px) {
+    .funnel__stages { grid-template-columns: 1fr; }
+    .funnel__stages li { text-align: start; padding-block: 0.35rem; }
+    .funnel__stages li::before { top: 0; bottom: 0; height: auto; width: 2px; inset-inline-start: 1.6rem; inset-inline-end: auto; }
+    .funnel__stages li:first-child::before { top: 50%; inset-inline-start: 1.6rem; }
+    .funnel__stages li:last-child::before { bottom: 50%; inset-inline-end: auto; }
+    .funnel__brackets { grid-template-columns: 1fr; margin-top: 1.5rem; row-gap: 0.75rem; }
+    .funnel__b, .funnel__b--typical, .funnel__b--ours { grid-column: 1; text-align: start; padding: 0; }
+    .funnel__b::before { display: none; }
+    .funnel__b small { display: inline; font-weight: 400; font-size: var(--t-base); color: var(--slate); }
   }
-  @media (max-width: 480px) { .metric dd { padding-inline-start: 0; } .report { box-shadow: 6px 6px 0 var(--ink); } }
-  @media (prefers-reduced-motion: reduce) { .ph { animation: none; } .report__line { stroke-dashoffset: 0; } }
 </style>

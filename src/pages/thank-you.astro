@@ -9,9 +9,9 @@ import { withBase } from '../lib/text';
 <Base title="תודה, הפרטים התקבלו" description="הפרטים התקבלו בהצלחה. נחזור אליך בהקדם." path="/thank-you/" noindex>
   <Header slot="header" home={false} />
   <section class="ty">
-    <div class="container ty__wrap">
+    <div class="wrap ty__wrap">
       <span class="ty__badge"><Icon name="check" size={40} stroke={3} /></span>
-      <h1>הפרטים התקבלו. <span class="mark">תודה!</span></h1>
+      <h1>הפרטים התקבלו. תודה!</h1>
       <p class="ty__lead">נחזור אליך בהקדם כדי לתאם את שיחת האסטרטגיה.</p>
       <ol class="ty__next" role="list">
         <li><b>1</b><span><strong>נעבור על הפרטים</strong> ונכין כמה שאלות על העסק שלך.</span></li>
@@ -19,8 +19,8 @@ import { withBase } from '../lib/text';
         <li><b>3</b><span><strong>בשיחה עצמה</strong> נבדוק יחד איפה נמצאות ההזדמנויות הגדולות.</span></li>
       </ol>
       <div class="ty__actions">
-        {whatsappUrl && <a class="btn btn--primary" href={whatsappUrl} target="_blank" rel="noopener" data-cta-location="thank-you"><Icon name="whatsapp" size={20} /> רוצה לזרז? כתבו לנו</a>}
-        <a class="btn btn--ghost" href={withBase('/')}>חזרה לעמוד הבית</a>
+        {whatsappUrl && <a class="btn btn--black" href={whatsappUrl} target="_blank" rel="noopener" data-cta-location="thank-you"><Icon name="whatsapp" size={20} /> רוצה לזרז? כתבו לנו</a>}
+        <a class="btn btn--outline" href={withBase('/')}>חזרה לעמוד הבית</a>
       </div>
     </div>
   </section>
@@ -54,12 +54,12 @@ import { withBase } from '../lib/text';
 <style>
   .ty { padding-block: clamp(3rem, 8vw, 7rem); }
   .ty__wrap { max-width: 720px; text-align: center; display: grid; justify-items: center; gap: 1.25rem; }
-  .ty__badge { width: 88px; height: 88px; border-radius: 50%; display: grid; place-items: center; background: var(--orange); border: 2px solid var(--ink); box-shadow: var(--shadow-hard); animation: pop 600ms var(--ease-out) both; }
+  .ty__badge { width: 88px; height: 88px; border-radius: 50%; display: grid; place-items: center; background: var(--orange); border: 2px solid var(--black); box-shadow: none; animation: pop 600ms var(--ease) both; }
   @keyframes pop { from { transform: scale(0.4) rotate(-20deg); opacity: 0; } }
-  .ty h1 { font-size: var(--fs-h2); }
-  .ty__lead { font-size: var(--fs-xl); color: var(--ink-2); }
+  .ty h1 { font-size: var(--d-md); }
+  .ty__lead { font-size: var(--t-lg); color: var(--slate); }
   .ty__next { text-align: start; display: grid; gap: 0.75rem; width: 100%; margin-top: 1rem; }
-  .ty__next li { display: flex; gap: 1rem; align-items: center; padding: 1rem 1.25rem; background: var(--white); border: 2px solid var(--ink); border-radius: var(--radius); }
-  .ty__next b { width: 36px; height: 36px; flex: none; display: grid; place-items: center; border-radius: 50%; background: var(--ink); color: var(--orange); }
+  .ty__next li { display: flex; gap: 1rem; align-items: center; padding: 1rem 1.25rem; background: var(--white); border: 2px solid var(--black); border-radius: var(--r-field); }
+  .ty__next b { width: 36px; height: 36px; flex: none; display: grid; place-items: center; border-radius: 50%; background: var(--black); color: var(--orange); }
   .ty__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; margin-top: 1rem; }
 </style>
