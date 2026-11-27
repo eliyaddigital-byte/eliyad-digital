@@ -1,0 +1,28 @@
+{
+  "name": "boostrize-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "BoostRize – אתר סוכנות שיווק דיגיטלי (Astro, static, GitHub Pages)",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "qa": "node scripts/qa.mjs",
+    "qa:form": "node scripts/qa-form.mjs",
+    "leads:dev": "node scripts/dev-lead-server.mjs",
+    "brand": "node scripts/make-brand-assets.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.6",
+    "@fontsource-variable/rubik": "^5.3.0",
+    "astro": "^7.4.13"
+  },
+  "devDependencies": {
+    "axe-core": "^4.14.1",
+    "playwright": "^1.65.1"
+  }
+}

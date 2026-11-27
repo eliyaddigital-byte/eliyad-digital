@@ -1,0 +1,48 @@
+---
+/** המלצות – מוצג רק כשיש המלצות מאומתות עם אישור פרסום (src/content/proof.ts) */
+import Icon from './Icon.astro';
+import { publishedTestimonials as items } from '../content/proof';
+import { withBase } from '../lib/text';
+const ytId = (u: string) => u.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/)?.[1];
+---
+{items.length > 0 && (
+  <section class="section section--tint testimonials" id="testimonials" aria-labelledby="t-title" data-section="testimonials">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">מה הלקוחות אומרים</p>
+        <h2 id="t-title">לא צריך להאמין רק לנו</h2>
+      </div>
+      <ul class="t__grid" role="list">
+        {items.map((t, i) => (
+          <li class="t" data-reveal style={`--i:${i % 3}`}>
+            <blockquote>
+              <span class="t__q" aria-hidden="true">”</span>
+              <p>{t.quote}</p>
+            </blockquote>
+            {t.videoUrl && ytId(t.videoUrl) && (
+              <a class="link-arrow t__video" href={t.videoUrl} target="_blank" rel="noopener">צפייה בהמלצה בווידאו <Icon name="play" size={16} /></a>
+            )}
+            <footer class="t__who">
+              {t.photo && <img src={withBase(t.photo)} alt="" width="52" height="52" loading="lazy" decoding="async" />}
+              <span><strong>{t.name}</strong><small>{[t.role, t.company].filter(Boolean).join(', ')}</small></span>
+              {t.logo && <img class="t__logo" src={withBase(t.logo)} alt={t.company || ''} width="80" height="32" loading="lazy" decoding="async" />}
+            </footer>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}
+
+<style>
+  .t__grid { display: grid; gap: 1.25rem; }
+  .t { display: flex; flex-direction: column; gap: 1.25rem; padding: 1.75rem; background: var(--white); border: 2px solid var(--ink); border-radius: var(--radius); }
+  .t blockquote { position: relative; font-size: var(--fs-lg); line-height: 1.55; }
+  .t__q { display: block; font-size: 4rem; line-height: 0.6; color: var(--orange); font-weight: 900; height: 1.6rem; }
+  .t__who { margin-top: auto; display: flex; align-items: center; gap: 0.8rem; }
+  .t__who img { border-radius: 50%; object-fit: cover; }
+  .t__who span { display: grid; }
+  .t__who small { color: var(--ink-soft); }
+  .t__logo { margin-inline-start: auto; border-radius: 0 !important; object-fit: contain !important; }
+  @media (min-width: 900px) { .t__grid { grid-template-columns: repeat(3, 1fr); } }
+</style>

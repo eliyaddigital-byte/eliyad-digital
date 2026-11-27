@@ -1,0 +1,120 @@
+---
+import Icon from './Icon.astro';
+import { services, servicesSection } from '../content/home';
+import { mark } from '../lib/text';
+const cats = servicesSection.categories;
+---
+<section class="section section--white services" id="services" aria-labelledby="services-title" data-section="services">
+  <div class="container">
+    <div class="services__head">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">{servicesSection.eyebrow}</p>
+        <h2 id="services-title" set:html={mark(servicesSection.title)} />
+        <p>{servicesSection.subtitle}</p>
+      </div>
+      <div class="services__tabs" role="tablist" aria-label="קטגוריות שירות" data-reveal>
+        {cats.map((c, i) => (
+          <button role="tab" type="button" id={`tab-${c.id}`} aria-controls={`panel-${c.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-tab={c.id}>
+            {c.label}<span class="services__count" aria-label={`${services.filter((s) => s.category === c.id).length} שירותים`}>{services.filter((s) => s.category === c.id).length}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+
+    {cats.map((c, i) => (
+      <div class="services__panel" role="tabpanel" id={`panel-${c.id}`} aria-labelledby={`tab-${c.id}`} hidden={i !== 0} tabindex="0">
+        <ul class="services__grid" role="list">
+          {services.filter((s) => s.category === c.id).map((s, j) => (
+            <li class="svc" style={`--i:${j}`}>
+              <div class="svc__top">
+                <span class="svc__icon"><Icon name={s.icon} size={26} /></span>
+                <span class="svc__arrow" aria-hidden="true"><Icon name="arrow-up-left" size={20} /></span>
+              </div>
+              <h3 class="svc__title">{s.title}</h3>
+              <p class="svc__value">{s.value}</p>
+              <ul class="svc__gets" role="list" aria-label="מה מקבלים">
+                {s.gets.map((g) => <li><Icon name="check" size={16} stroke={3} />{g}</li>)}
+              </ul>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+
+    <div class="services__cta" data-reveal>
+      <p>לא בטוחים מה העסק שלכם צריך? זה בדיוק מה שבודקים בשיחת האבחון.</p>
+      <a class="btn btn--primary" href="#contact" data-cta="services">בואו נבנה תוכנית <Icon name="arrow-left" size={18} class="btn__arrow" /></a>
+    </div>
+  </div>
+</section>
+
+<script>
+  const tabs = [...document.querySelectorAll<HTMLButtonElement>('.services__tabs [role="tab"]')];
+  const select = (t: HTMLButtonElement, focus = false) => {
+    tabs.forEach((x) => {
+      const on = x === t;
+      x.setAttribute('aria-selected', String(on));
+      x.tabIndex = on ? 0 : -1;
+      const p = document.getElementById(x.getAttribute('aria-controls') || '');
+      if (p) p.hidden = !on;
+    });
+    if (focus) t.focus();
+    window.__brTrack?.('service_tab', { tab_id: t.dataset.tab });
+  };
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => select(t));
+    t.addEventListener('keydown', (e) => {
+      // RTL: ArrowLeft = next, ArrowRight = previous
+      let n = -1;
+      if (e.key === 'ArrowLeft') n = (i + 1) % tabs.length;
+      if (e.key === 'ArrowRight') n = (i - 1 + tabs.length) % tabs.length;
+      if (e.key === 'Home') n = 0;
+      if (e.key === 'End') n = tabs.length - 1;
+      if (n >= 0) { e.preventDefault(); select(tabs[n], true); }
+    });
+  });
+</script>
+
+<style>
+  .services__head { display: grid; gap: 1.5rem; align-items: end; margin-bottom: clamp(2rem, 3vw, 3rem); }
+  .services__head .section-head { margin-bottom: 0; }
+  .services__tabs { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .services__tabs button {
+    display: inline-flex; align-items: center; gap: 0.55rem; min-height: 48px; padding: 0.55rem 1.1rem;
+    border: 2px solid var(--ink); border-radius: var(--radius-pill); background: transparent; font-weight: 700;
+    transition: background var(--dur-fast), color var(--dur-fast);
+  }
+  .services__tabs button:hover { background: var(--orange-50); }
+  .services__tabs button[aria-selected='true'] { background: var(--ink); color: var(--white); }
+  .services__count { font-size: 0.75rem; min-width: 1.5rem; height: 1.5rem; display: grid; place-items: center; border-radius: 50%; background: var(--orange); color: var(--ink); }
+  .services__panel:focus-visible { outline-offset: 8px; }
+  .services__grid { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+  .svc {
+    position: relative; display: flex; flex-direction: column; padding: 1.6rem; background: var(--paper);
+    border: 2px solid var(--ink); border-radius: var(--radius);
+    transition: transform var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out), background var(--dur);
+    animation: svcIn 600ms var(--ease-out) both; animation-delay: calc(var(--i) * 60ms);
+  }
+  @keyframes svcIn { from { opacity: 0; transform: translateY(16px); } }
+  .svc:hover { transform: translate(4px, -4px); box-shadow: -6px 6px 0 var(--orange); background: var(--white); }
+  .svc__top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.1rem; }
+  .svc__icon { width: 54px; height: 54px; display: grid; place-items: center; background: var(--ink); color: var(--orange); border-radius: var(--radius); }
+  .svc__arrow { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%; border: 2px solid var(--ink); transition: background var(--dur), transform var(--dur) var(--ease-out); }
+  .svc:hover .svc__arrow { background: var(--orange); transform: rotate(-10deg); }
+  .svc__title { font-size: var(--fs-h3); margin-bottom: 0.6rem; }
+  .svc__value { color: var(--ink-2); margin-bottom: 1.1rem; }
+  .svc__gets { margin-top: auto; padding-top: 1rem; border-top: 1px dashed #c9c0b0; display: grid; gap: 0.45rem; }
+  .svc__gets li { display: flex; gap: 0.5rem; align-items: flex-start; font-size: var(--fs-sm); font-weight: 500; }
+  .svc__gets :global(svg) { color: var(--orange-ink); margin-top: 0.2rem; flex: none; }
+  .services__cta {
+    margin-top: 2.5rem; display: flex; flex-wrap: wrap; gap: 1rem 2rem; align-items: center; justify-content: space-between;
+    padding: 1.5rem 1.75rem; border-radius: var(--radius); background: var(--orange-50); border: 2px dashed var(--orange-600);
+  }
+  .services__cta p { font-size: var(--fs-lg); font-weight: 600; }
+  @media (min-width: 700px) { .services__grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1100px) {
+    .services__head { grid-template-columns: 1fr auto; }
+    .services__grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (prefers-reduced-motion: reduce) { .svc { animation: none; } }
+</style>

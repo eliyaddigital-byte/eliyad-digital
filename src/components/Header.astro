@@ -1,0 +1,102 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { site } from '../config/site';
+import { withBase } from '../lib/text';
+
+interface Props { home?: boolean }
+const { home = true } = Astro.props;
+const h = (id: string) => (home ? `#${id}` : `${withBase('/')}#${id}`);
+const links = [
+  { label: 'ראשי', href: home ? '#top' : withBase('/') },
+  { label: 'השירותים שלנו', href: h('services') },
+  { label: 'שיטת העבודה', href: h('process') },
+  { label: 'תוצאות', href: h('results') },
+  { label: 'אודות', href: h('about') },
+  { label: 'שאלות נפוצות', href: h('faq') },
+  { label: 'יצירת קשר', href: h('contact') },
+];
+---
+<header class="header" data-header>
+  <div class="container header__bar">
+    <a class="header__logo" href={home ? '#top' : withBase('/')}>
+      <Logo size="sm" />
+    </a>
+    <nav class="header__nav" aria-label="ניווט ראשי" data-nav>
+      <ul role="list">
+        {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+    <div class="header__actions">
+      <a class="btn btn--primary header__cta" href={h('contact')} data-cta="header" data-cta-location="header">
+        {site.cta.primaryShort}
+        <Icon name="arrow-left" size={18} class="btn__arrow" />
+      </a>
+      <button class="header__burger" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="פתיחת תפריט" data-menu-toggle>
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <div id="mobile-menu" class="mobile-menu" hidden>
+    <nav class="container" aria-label="ניווט במובייל">
+      <ul role="list">
+        {links.map((l, i) => <li style={`--i:${i}`}><a href={l.href}>{l.label}<Icon name="arrow-left" size={20} /></a></li>)}
+      </ul>
+      <a class="btn btn--primary btn--lg btn--block" href={h('contact')} data-cta="mobile-menu" data-cta-location="mobile-menu">
+        {site.cta.primary}
+        <Icon name="arrow-left" size={20} class="btn__arrow" />
+      </a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky; top: 0; z-index: 80;
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: saturate(1.4) blur(12px);
+    -webkit-backdrop-filter: saturate(1.4) blur(12px);
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--dur), background var(--dur);
+  }
+  .header:global(.is-scrolled) { border-bottom-color: var(--line); }
+  .header__bar { height: var(--header-h); display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
+  .header__logo { text-decoration: none; display: inline-flex; padding: 4px 0; }
+  .header__nav { display: none; }
+  .header__nav ul { display: flex; gap: clamp(0.75rem, 1.6vw, 1.75rem); }
+  .header__nav a {
+    position: relative; text-decoration: none; font-weight: 500; font-size: var(--fs-sm); padding: 0.5rem 0; white-space: nowrap;
+  }
+  .header__nav a::after {
+    content: ''; position: absolute; inset-inline: 0; bottom: 2px; height: 3px; background: var(--orange);
+    transform: scaleX(0); transform-origin: right; transition: transform var(--dur) var(--ease-out);
+  }
+  .header__nav a:hover::after, .header__nav a[aria-current]::after { transform: scaleX(1); }
+  .header__actions { display: flex; align-items: center; gap: 0.75rem; }
+  .header__cta { min-height: 44px; padding: 0.55rem 1.1rem; font-size: var(--fs-sm); }
+  .header__burger {
+    width: 48px; height: 48px; display: grid; place-content: center; gap: 5px;
+    background: var(--ink); border: 0; border-radius: var(--radius);
+  }
+  .header__burger span { width: 20px; height: 2px; background: var(--paper); transition: transform var(--dur) var(--ease-out), opacity var(--dur); }
+  .header__burger[aria-expanded='true'] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .header__burger[aria-expanded='true'] span:nth-child(2) { opacity: 0; }
+  .header__burger[aria-expanded='true'] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .mobile-menu {
+    position: fixed; inset: var(--header-h) 0 0; background: var(--paper); overflow-y: auto;
+    padding-block: 1rem 2rem; border-top: 1px solid var(--line);
+  }
+  .mobile-menu ul { margin-bottom: 1.5rem; }
+  .mobile-menu li { border-bottom: 1px solid var(--line); animation: menuIn 420ms var(--ease-out) both; animation-delay: calc(var(--i) * 40ms); }
+  .mobile-menu li a { display: flex; justify-content: space-between; align-items: center; padding: 1.05rem 0.25rem; font-size: 1.375rem; font-weight: 700; text-decoration: none; }
+  .mobile-menu li a :global(svg) { color: var(--orange-600); }
+  @keyframes menuIn { from { opacity: 0; transform: translateY(10px); } }
+
+  @media (max-width: 479px) { .header__cta { display: none; } }
+  @media (min-width: 1024px) {
+    .header__nav { display: block; }
+    .header__burger { display: none; }
+    .mobile-menu { display: none; }
+  }
+</style>

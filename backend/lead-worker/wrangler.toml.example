@@ -1,0 +1,14 @@
+# העתיקו ל-wrangler.toml והשלימו. לא מכניסים כאן סודות – רק דרך:  npx wrangler secret put NAME
+name = "boostrize-leads"
+main = "src/index.ts"
+compatibility_date = "2026-11-01"
+
+[vars]
+ALLOWED_ORIGINS = "https://eliyaddigital-byte.github.io"
+RATE_LIMIT_PER_HOUR = "5"
+DEDUPE_WINDOW_HOURS = "24"
+
+# צרו KV:  npx wrangler kv namespace create LEADS_KV   והדביקו את ה-id
+[[kv_namespaces]]
+binding = "LEADS_KV"
+id = "PASTE_KV_NAMESPACE_ID"

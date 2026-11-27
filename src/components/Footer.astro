@@ -1,0 +1,96 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { site, whatsappUrl, telUrl, mailUrl } from '../config/site';
+import { withBase } from '../lib/text';
+
+interface Props { home?: boolean }
+const { home = true } = Astro.props;
+const h = (id: string) => (home ? `#${id}` : `${withBase('/')}#${id}`);
+const nav = [
+  { label: 'השירותים שלנו', href: h('services') },
+  { label: 'שיטת העבודה', href: h('process') },
+  { label: 'תוצאות', href: h('results') },
+  { label: 'אודות', href: h('about') },
+  { label: 'שאלות נפוצות', href: h('faq') },
+  { label: 'יצירת קשר', href: h('contact') },
+];
+const legal = [
+  { label: 'מדיניות פרטיות', href: withBase('/privacy/') },
+  { label: 'תנאי שימוש', href: withBase('/terms/') },
+  { label: 'הצהרת נגישות', href: withBase('/accessibility/') },
+];
+const socials = (Object.entries(site.social) as [string, string][]).filter(([, url]) => Boolean(url));
+const socialLabel: Record<string, string> = { facebook: 'פייסבוק', instagram: 'אינסטגרם', linkedin: 'לינקדאין', tiktok: 'טיקטוק', youtube: 'יוטיוב' };
+const consentEnabled = Boolean(site.analytics.gtmId || site.analytics.ga4Id || site.analytics.clarityId);
+const year = new Date().getFullYear();
+---
+<footer class="footer" data-section="footer">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a href={home ? '#top' : withBase('/')} class="footer__logo"><Logo variant="light" size="lg" /></a>
+        <p>{site.brand.tagline}</p>
+        <a class="btn btn--primary" href={h('contact')} data-cta="footer">{site.cta.primary} <Icon name="arrow-left" size={18} class="btn__arrow" /></a>
+      </div>
+      <nav class="footer__col" aria-label="ניווט בתחתית העמוד">
+        <h2>ניווט</h2>
+        <ul role="list">{nav.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul>
+      </nav>
+      {(whatsappUrl || telUrl || mailUrl || site.contact.address || site.contact.hours) && (
+        <div class="footer__col">
+          <h2>יצירת קשר</h2>
+          <ul role="list">
+            {whatsappUrl && <li><a href={whatsappUrl} target="_blank" rel="noopener" data-cta-location="footer"><Icon name="whatsapp" size={18} /> וואטסאפ</a></li>}
+            {telUrl && <li><a href={telUrl} data-cta-location="footer" dir="ltr"><Icon name="phone" size={18} /> {site.contact.phone}</a></li>}
+            {mailUrl && <li><a href={mailUrl} data-cta-location="footer"><Icon name="mail" size={18} /> {site.contact.email}</a></li>}
+            {site.contact.address && <li>{site.contact.address}</li>}
+            {site.contact.hours && <li>{site.contact.hours}</li>}
+          </ul>
+        </div>
+      )}
+      {socials.length > 0 && (
+        <div class="footer__col">
+          <h2>עקבו אחרינו</h2>
+          <ul role="list" class="footer__social">
+            {socials.map(([k, url]) => (
+              <li><a href={url} target="_blank" rel="noopener" aria-label={socialLabel[k] || k}><Icon name={k} size={22} /></a></li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+    <div class="footer__bottom">
+      <p>© {year} {site.brand.legalName || site.brand.name}. כל הזכויות שמורות.</p>
+      <ul role="list" class="footer__legal">
+        {legal.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+        {consentEnabled && <li><button type="button" data-open-consent>הגדרות עוגיות</button></li>}
+      </ul>
+    </div>
+  </div>
+  <div class="footer__giant" aria-hidden="true">BoostRize</div>
+</footer>
+
+<style>
+  .footer { position: relative; background: var(--ink); color: #d9d4ca; padding-top: clamp(4rem, 7vw, 6rem); overflow: hidden; }
+  .footer__top { display: grid; gap: 2.5rem; padding-bottom: 3rem; border-bottom: 1px solid #333; }
+  .footer__brand { display: grid; gap: 1.1rem; justify-items: start; max-width: 26rem; }
+  .footer__logo { text-decoration: none; }
+  .footer__brand p { font-size: var(--fs-lg); color: #bdb7ab; }
+  .footer__col h2 { font-size: var(--fs-sm); font-weight: 700; color: var(--orange); letter-spacing: 0.02em; margin-bottom: 1rem; }
+  .footer__col ul { display: grid; gap: 0.25rem; }
+  .footer__col a { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 40px; text-decoration: none; color: #e8e3d9; transition: color var(--dur-fast); }
+  .footer__col a:hover { color: var(--orange); }
+  .footer__social { display: flex !important; gap: 0.5rem !important; }
+  .footer__social a { width: 44px; height: 44px; justify-content: center; border: 1.5px solid #444; border-radius: 50%; }
+  .footer__bottom { display: flex; flex-wrap: wrap; gap: 1rem 2rem; justify-content: space-between; align-items: center; padding-block: 1.5rem; font-size: var(--fs-sm); color: #a8a295; }
+  .footer__legal { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; }
+  .footer__legal a, .footer__legal button { color: #d9d4ca; text-decoration: underline; text-underline-offset: 4px; background: none; border: 0; padding: 0.4rem 0; min-height: 40px; font-size: inherit; }
+  .footer__legal a:hover, .footer__legal button:hover { color: var(--orange); }
+  .footer__giant {
+    font-weight: 900; font-size: clamp(4.5rem, 19vw, 17rem); line-height: 0.78; letter-spacing: -0.05em; direction: ltr; text-align: center;
+    color: transparent; -webkit-text-stroke: 1.5px #2e2e2e; user-select: none; margin-bottom: -0.08em; white-space: nowrap;
+  }
+  @media (min-width: 900px) { .footer__top { grid-template-columns: 1.4fr 1fr 1fr 0.8fr; } }
+  @media (max-width: 899px) { .footer { padding-bottom: 4.5rem; } }
+</style>

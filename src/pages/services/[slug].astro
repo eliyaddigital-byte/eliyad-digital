@@ -1,0 +1,22 @@
+---
+/**
+ * עמודי שירות – נוצרים רק לשירותים עם page.published=true (src/content/home.ts).
+ * כך לא מתפרסמים עמודים דלים או כפולים.
+ */
+import Page from '../../layouts/Page.astro';
+import { services } from '../../content/home';
+import { withBase } from '../../lib/text';
+
+export function getStaticPaths() {
+  return services.filter((s) => s.page?.published).map((s) => ({ params: { slug: s.slug }, props: { service: s } }));
+}
+const { service } = Astro.props;
+const p = service.page!;
+---
+<Page title={service.title} description={p.metaDescription} path={`/services/${service.slug}/`} heading={service.title} eyebrow="שירות">
+  <p><strong>{service.value}</strong></p>
+  <p>{p.intro}</p>
+  {p.sections.map((sec) => (<><h2>{sec.heading}</h2><p>{sec.body}</p></>))}
+  {p.faq?.length ? (<><h2>שאלות נפוצות</h2>{p.faq.map((f) => (<><h3>{f.q}</h3><p>{f.a}</p></>))}</>) : null}
+  <p><a href={`${withBase('/')}#contact`}>לתיאום שיחת אסטרטגיה</a></p>
+</Page>

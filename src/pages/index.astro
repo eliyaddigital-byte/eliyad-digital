@@ -1,0 +1,64 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Platforms from '../components/Platforms.astro';
+import Pains from '../components/Pains.astro';
+import Services from '../components/Services.astro';
+import Results from '../components/Results.astro';
+import Process from '../components/Process.astro';
+import Benefits from '../components/Benefits.astro';
+import About from '../components/About.astro';
+import VideoSection from '../components/VideoSection.astro';
+import Testimonials from '../components/Testimonials.astro';
+import Faq from '../components/Faq.astro';
+import LeadForm from '../components/LeadForm.astro';
+import Footer from '../components/Footer.astro';
+import MobileCta from '../components/MobileCta.astro';
+import { site } from '../config/site';
+import { faqSection, services } from '../content/home';
+
+const siteUrl = `${(Astro.site?.toString() || '').replace(/\/$/, '')}${import.meta.env.BASE_URL.replace(/\/?$/, '/')}`;
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqSection.items.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+const servicesSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: `השירותים של ${site.brand.name}`,
+  itemListElement: services.map((s, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    item: {
+      '@type': 'Service',
+      name: s.title,
+      description: s.value,
+      provider: { '@id': `${siteUrl}#organization` },
+      areaServed: { '@type': 'Country', name: 'Israel' },
+    },
+  })),
+};
+---
+<Base
+  title={`${site.brand.name} | סוכנות פרסום ממומן, מדידה ואוטומציה`}
+  description="סוכנות שיווק דיגיטלי לניהול קמפיינים בגוגל, פייסבוק, אינסטגרם, טיקטוק ולינקדאין, עם מדידה מקצה לקצה, דוחות שקופים ואוטומציות. מתאמים שיחת אסטרטגיה."
+  schema={[faqSchema, servicesSchema]}
+>
+  <Header slot="header" />
+  <Hero />
+  <Platforms />
+  <Pains />
+  <Services />
+  <Results />
+  <Process />
+  <Benefits />
+  <About />
+  <VideoSection />
+  <Testimonials />
+  <Faq />
+  <LeadForm />
+  <Footer slot="footer" />
+  <MobileCta slot="footer" />
+</Base>
