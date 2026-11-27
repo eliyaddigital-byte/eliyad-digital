@@ -38,6 +38,15 @@ const show = Boolean(file);
   </figure>
 )}
 
+<script>
+  document.querySelectorAll<HTMLVideoElement>('.mslot video[controls]').forEach((v) => {
+    let started = false;
+    const title = v.getAttribute('aria-label') || '';
+    v.addEventListener('play', () => { if (!started) { started = true; window.__brTrack?.('video_start', { video_title: title, video_provider: 'file' }); } });
+    v.addEventListener('ended', () => window.__brTrack?.('video_complete', { video_title: title, video_provider: 'file' }));
+  });
+</script>
+
 <style>
   .mslot { position: relative; margin: 0; aspect-ratio: var(--ar); overflow: hidden; background: #111; }
   .mslot--round { border-radius: var(--r-panel); }
