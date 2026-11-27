@@ -21,9 +21,9 @@ const f = aboutSection.founder;
           {f.name && <figcaption><strong>{f.name}</strong>{f.role && <span>{f.role}</span>}</figcaption>}
         </figure>
       )}
-      <h3 id="platforms-title" class="about__side-title">{platformsSection.title}</h3>
+      <p id="platforms-title" class="about__side-title">{platformsSection.title}</p>
       <ul role="list" class="platforms">
-        {platforms.map((p) => <li dir="ltr">{p.name}</li>)}
+        {platforms.map((p) => <li dir="ltr">{p.icon && <img src={withBase(`icons/${p.icon}.svg`)} alt="" width="18" height="18" loading="lazy" decoding="async" />}{p.name}</li>)}
       </ul>
       <p class="platforms__note">{platformsSection.note}</p>
     </aside>
@@ -42,7 +42,8 @@ const f = aboutSection.founder;
   .about__side { background: var(--fog); border-radius: var(--r-panel); padding: clamp(1.5rem, 1rem + 2vw, 2.5rem); align-self: start; }
   .about__side-title { font-size: var(--t-md); font-weight: 600; margin-bottom: 1.25rem; }
   .platforms { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-  .platforms li { background: var(--white); border-radius: var(--r-pill); padding: 0.4rem 0.9rem; font-weight: 600; font-size: var(--t-sm); }
+  .platforms li { display: inline-flex; align-items: center; gap: 0.45rem; background: var(--white); border-radius: var(--r-pill); padding: 0.45rem 0.9rem; font-weight: 600; font-size: var(--t-sm); }
+  .platforms img { width: 18px; height: 18px; object-fit: contain; }
   .platforms__note { margin-top: 1.25rem; font-size: 0.8125rem; color: var(--slate); }
   .founder { margin-bottom: 2rem; }
   .founder img { border-radius: var(--r-panel); object-fit: cover; aspect-ratio: 14 / 17; width: 100%; }

@@ -14,7 +14,7 @@ import { whatsappUrl } from '../config/site';
         <li class="step">
           <span class="step__n" aria-hidden="true">{i + 1}</span>
           <div>
-            <h3>{s.title}</h3>
+            <p class="step__t">{s.title}</p>
             <p>{s.text}</p>
           </div>
         </li>
@@ -29,8 +29,8 @@ import { whatsappUrl } from '../config/site';
   .steps { counter-reset: s; }
   .step { display: grid; grid-template-columns: 4.5rem 1fr; gap: 1.25rem; padding-block: 1.5rem; border-top: 1px solid var(--line-dark); }
   .step__n { font-family: var(--display); font-weight: 700; font-size: 4.5rem; line-height: 0.8; color: var(--orange); }
-  .step h3 { font-size: var(--t-lg); font-weight: 600; margin-bottom: 0.35rem; }
-  .step p { color: #b9bec5; max-width: 52ch; }
+  .step__t { font-size: var(--t-lg); font-weight: 600; margin-bottom: 0.35rem; }
+  .step p:not(.step__t) { color: #b9bec5; max-width: 52ch; }
   @media (min-width: 1024px) {
     .process__layout { grid-template-columns: 0.85fr 1.15fr; gap: 5rem; }
     .process__intro { position: sticky; top: calc(var(--header-h) + 3rem); }

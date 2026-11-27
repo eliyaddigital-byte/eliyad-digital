@@ -58,6 +58,7 @@ img { height: auto; }
 input, button, textarea, select { font: inherit; color: inherit; }
 button { cursor: pointer; }
 a { color: inherit; }
+a, button, summary, input, select, label { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
 h1, h2, h3 { text-wrap: balance; }
 h1 { font-family: var(--display); font-weight: 700; line-height: 0.95; }
 p { text-wrap: pretty; }

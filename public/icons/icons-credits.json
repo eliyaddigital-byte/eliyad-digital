@@ -1,0 +1,122 @@
+[
+  {
+    "file": "google-ads.svg",
+    "icon": "logos:google-ads",
+    "name": "Google Ads",
+    "kind": "colour",
+    "source": "gilbarbara/logos@d6960edc1b7309d392c76e40d3a320df7f9ff85c",
+    "author": "Gil Barbara",
+    "licence": "CC0-1.0",
+    "url": "https://github.com/gilbarbara/logos",
+    "trademark": true,
+    "markUrl": "https://ads.google.com/home/"
+  },
+  {
+    "file": "google-analytics.svg",
+    "icon": "logos:google-analytics",
+    "name": "Google Analytics",
+    "kind": "colour",
+    "source": "gilbarbara/logos@d6960edc1b7309d392c76e40d3a320df7f9ff85c",
+    "author": "Gil Barbara",
+    "licence": "CC0-1.0",
+    "url": "https://github.com/gilbarbara/logos",
+    "trademark": true,
+    "markUrl": "https://www.google.com/analytics/"
+  },
+  {
+    "file": "google-tag-manager.svg",
+    "icon": "logos:google-tag-manager",
+    "name": "Google Tag Manager",
+    "kind": "colour",
+    "source": "gilbarbara/logos@d6960edc1b7309d392c76e40d3a320df7f9ff85c",
+    "author": "Gil Barbara",
+    "licence": "CC0-1.0",
+    "url": "https://github.com/gilbarbara/logos",
+    "trademark": true,
+    "markUrl": "https://marketingplatform.google.com/about/tag-manager/"
+  },
+  {
+    "file": "instagram.svg",
+    "icon": "logos:instagram-icon",
+    "name": "Instagram",
+    "kind": "colour",
+    "source": "gilbarbara/logos@d6960edc1b7309d392c76e40d3a320df7f9ff85c",
+    "author": "Gil Barbara",
+    "licence": "CC0-1.0",
+    "url": "https://github.com/gilbarbara/logos",
+    "trademark": true,
+    "markUrl": "https://instagram.com/"
+  },
+  {
+    "file": "linkedin.svg",
+    "icon": "logos:linkedin-icon",
+    "name": "LinkedIn",
+    "kind": "colour",
+    "source": "gilbarbara/logos@d6960edc1b7309d392c76e40d3a320df7f9ff85c",
+    "author": "Gil Barbara",
+    "licence": "CC0-1.0",
+    "url": "https://github.com/gilbarbara/logos",
+    "trademark": true,
+    "markUrl": "https://www.linkedin.com/"
+  },
+  {
+    "file": "make.svg",
+    "icon": "si:make",
+    "name": "Make",
+    "kind": "mono",
+    "source": "simple-icons@16.30.0",
+    "author": "Simple Icons Collaborators",
+    "licence": "CC0-1.0",
+    "url": "https://github.com/simple-icons/simple-icons",
+    "trademark": true,
+    "colour": "one-colour fallback in the brand hex"
+  },
+  {
+    "file": "meta.svg",
+    "icon": "logos:meta-icon",
+    "name": "Meta",
+    "kind": "colour",
+    "source": "gilbarbara/logos@d6960edc1b7309d392c76e40d3a320df7f9ff85c",
+    "author": "Gil Barbara",
+    "licence": "CC0-1.0",
+    "url": "https://github.com/gilbarbara/logos",
+    "trademark": true,
+    "markUrl": "https://www.meta.com/"
+  },
+  {
+    "file": "tiktok.svg",
+    "icon": "logos:tiktok-icon",
+    "name": "TikTok",
+    "kind": "colour",
+    "source": "gilbarbara/logos@d6960edc1b7309d392c76e40d3a320df7f9ff85c",
+    "author": "Gil Barbara",
+    "licence": "CC0-1.0",
+    "url": "https://github.com/gilbarbara/logos",
+    "trademark": true,
+    "markUrl": "https://www.tiktok.com/"
+  },
+  {
+    "file": "youtube.svg",
+    "icon": "logos:youtube-icon",
+    "name": "YouTube",
+    "kind": "colour",
+    "source": "gilbarbara/logos@d6960edc1b7309d392c76e40d3a320df7f9ff85c",
+    "author": "Gil Barbara",
+    "licence": "CC0-1.0",
+    "url": "https://github.com/gilbarbara/logos",
+    "trademark": true,
+    "markUrl": "https://www.youtube.com/"
+  },
+  {
+    "file": "zapier.svg",
+    "icon": "logos:zapier",
+    "name": "Zapier",
+    "kind": "colour",
+    "source": "gilbarbara/logos@d6960edc1b7309d392c76e40d3a320df7f9ff85c",
+    "author": "Gil Barbara",
+    "licence": "CC0-1.0",
+    "url": "https://github.com/gilbarbara/logos",
+    "trademark": true,
+    "markUrl": "https://zapier.com/"
+  }
+]

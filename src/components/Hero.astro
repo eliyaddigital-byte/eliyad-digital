@@ -5,7 +5,9 @@
  * The calculator only computes from the visitor's own inputs – no claims, no invented data.
  */
 import Icon from './Icon.astro';
-import { hero } from '../content/home';
+import { hero, platforms } from '../content/home';
+import { withBase } from '../lib/text';
+const adIcons = platforms.filter((p) => p.group === 'ads' && p.icon);
 import { site, whatsappUrl, telUrl, leadFormActive } from '../config/site';
 import { plain } from '../lib/text';
 const variants = Object.entries(hero.headlines);
@@ -31,20 +33,17 @@ const waBase = site.contact.whatsapp ? `https://wa.me/${site.contact.whatsapp}` 
           ) : (
             <a class="btn btn--black btn--lg" href="#contact" data-cta="hero-primary">{site.cta.primary}</a>
           )}
-          {leadFormActive || !telUrl ? (
-            <a class="btn btn--outline btn--lg" href="#contact" data-cta="hero-secondary">קביעת שיחת אבחון</a>
-          ) : (
-            <a class="btn btn--outline btn--lg" href={telUrl} data-cta="hero-phone"><Icon name="phone" size={20} /><span dir="ltr">{site.contact.phone}</span></a>
-          )}
         </div>
-        <ul class="hero__points" role="list">
-          {hero.bullets.map((b) => <li><Icon name="check" size={18} stroke={3} />{b}</li>)}
-        </ul>
+        <div class="hero__tools">
+          <p>מנהלים קמפיינים ב-</p>
+          <ul role="list">
+            {adIcons.map((p) => <li><img src={withBase(`icons/${p.icon}.svg`)} alt={p.name} width="28" height="28" loading="eager" decoding="async" /></li>)}
+          </ul>
+        </div>
       </div>
 
-      <form class="calc" data-calc data-wa={waBase} aria-labelledby="calc-title" onsubmit="return false">
-        <h2 id="calc-title" class="calc__title">כמה עולה לך לקוח חדש?</h2>
-        <p class="calc__hint">הזיזו את הסמנים לפי המספרים של העסק שלכם.</p>
+      <div class="calc" role="group" data-calc data-wa={waBase} aria-labelledby="calc-title">
+        <p id="calc-title" class="calc__title">כמה עולה לך לקוח חדש?</p>
 
         <div class="calc__row">
           <label for="calc-budget">תקציב פרסום בחודש</label>
@@ -70,15 +69,16 @@ const waBase = site.contact.whatsapp ? `https://wa.me/${site.contact.whatsapp}` 
         <p class="calc__insight" data-res="insight">אם עוד 2% מהפניות ייסגרו, העלות ללקוח תרד ל-1,042 ₪ באותו תקציב.</p>
         {waBase && (
           <a class="btn btn--orange btn--block" href={whatsappUrl} target="_blank" rel="noopener" data-calc-wa data-cta="calc-whatsapp">
-            <Icon name="whatsapp" size={20} />שליחת המספרים אלינו לבדיקה
+            <Icon name="whatsapp" size={20} />שליחת הודעה בוואטסאפ
           </a>
         )}
-      </form>
+        {waBase && <p class="calc__note">ההודעה תכלול את החישוב שלכם.</p>}
+      </div>
   </div>
 </section>
 
 <script>
-  const form = document.querySelector<HTMLFormElement>('[data-calc]');
+  const form = document.querySelector<HTMLElement>('[data-calc]');
   if (form) {
     const nf = new Intl.NumberFormat('he-IL', { maximumFractionDigits: 0 });
     const ils = (n: number) => `${nf.format(Math.round(n))} ₪`;
@@ -136,7 +136,8 @@ const waBase = site.contact.whatsapp ? `https://wa.me/${site.contact.whatsapp}` 
 </script>
 
 <style>
-  .hero { background: var(--orange); padding-block: clamp(1.5rem, 1rem + 2vw, 3rem) clamp(3.5rem, 2rem + 5vw, 6.5rem); }
+  .hero { background: var(--orange); padding-block: clamp(1.5rem, 1rem + 2vw, 3rem) clamp(3rem, 2rem + 3vw, 4.5rem); }
+  @media (min-width: 960px) { .hero { min-height: calc(100svh - var(--header-h)); display: grid; align-items: center; } }
   .hero__title { font-size: var(--d-xl); }
   .hero__title > span[hidden] { display: none; }
   .hero__title > span { display: block; }
@@ -147,14 +148,16 @@ const waBase = site.contact.whatsapp ? `https://wa.me/${site.contact.whatsapp}` 
   .hero__copy { display: grid; align-content: center; }
   .hero__sub { margin-top: 1.75rem; font-size: clamp(1.2rem, 1.05rem + 0.6vw, 1.5rem); line-height: 1.5; max-width: 34ch; }
   .hero__ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
-  .hero__points { display: grid; gap: 0.6rem; margin-top: 2.25rem; font-weight: 500; }
-  .hero__points li { display: flex; gap: 0.6rem; align-items: center; }
+  .hero__tools { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1rem; margin-top: 2.25rem; font-weight: 500; }
+  .hero__tools ul { display: flex; gap: 0.5rem; }
+  .hero__tools li { width: 46px; height: 46px; display: grid; place-items: center; background: var(--white); border-radius: 12px; }
+  .hero__tools img { width: 26px; height: 26px; object-fit: contain; }
 
   /* Calculator panel */
-  .calc { background: var(--black); color: var(--white); border-radius: var(--r-panel); padding: clamp(1.5rem, 1rem + 2vw, 2.5rem); display: grid; gap: 1.1rem; animation: panelIn 900ms var(--ease) 280ms both; }
+  .calc { background: var(--black); color: var(--white); border-radius: var(--r-panel); padding: clamp(1.5rem, 1rem + 1.6vw, 2.25rem); display: grid; gap: 0.9rem; animation: panelIn 900ms var(--ease) 280ms both; }
   @keyframes panelIn { from { opacity: 0; transform: translateY(24px); } }
   .calc__title { font-family: var(--display); font-weight: 700; font-size: var(--d-sm); line-height: 1; }
-  .calc__hint { color: #a9afb7; font-size: var(--t-sm); margin-top: -0.5rem; }
+  .calc__note { color: #a9afb7; font-size: var(--t-sm); margin-top: -0.4rem; text-align: center; }
   .calc__row { display: grid; grid-template-columns: 1fr auto; gap: 0.35rem 1rem; align-items: baseline; }
   .calc__row label { font-size: var(--t-sm); color: #d4d8dd; }
   .calc__row output { font-weight: 600; font-variant-numeric: tabular-nums; }
@@ -171,11 +174,11 @@ const waBase = site.contact.whatsapp ? `https://wa.me/${site.contact.whatsapp}` 
   .calc input[type='range']::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: var(--white); border: 4px solid var(--orange); }
   .calc input[type='range']:focus-visible { outline: 2px solid var(--white); outline-offset: 4px; box-shadow: none; }
 
-  .calc__results { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: #2e2e2e; border-radius: 12px; overflow: hidden; margin-top: 0.4rem; }
-  .calc__results > div { background: #141414; padding: 0.9rem 1rem; }
+  .calc__results { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1.5rem; margin-top: 0.25rem; border-top: 1px solid #333; }
+  .calc__results > div { padding: 0.8rem 0; }
   .calc__results dt { font-size: var(--t-sm); color: #a9afb7; }
   .calc__results dd { font-weight: 600; font-size: var(--t-md); font-variant-numeric: tabular-nums; }
-  .calc__main { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+  .calc__main { grid-column: 1 / -1; border-top: 1px solid #333; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
   .calc__main dt { font-size: var(--t-base); color: var(--white); font-weight: 600; }
   .calc__main dd { font-family: var(--display); font-size: clamp(3rem, 2.4rem + 2.6vw, 4.5rem); line-height: 1; color: var(--orange); }
   .calc__insight { font-size: var(--t-sm); color: #d4d8dd; }

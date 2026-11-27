@@ -1,5 +1,6 @@
 ---
 import '@fontsource/karantina/700.css';
+import karantinaHebrew from '@fontsource/karantina/files/karantina-hebrew-700-normal.woff2?url';
 import '@fontsource/ibm-plex-sans-hebrew/400.css';
 import '@fontsource/ibm-plex-sans-hebrew/600.css';
 import '../styles/global.css';
@@ -82,6 +83,7 @@ void whatsappUrl; void telUrl; void mailUrl;
     <meta name="format-detection" content="telephone=no" />
     {site.analytics.googleSiteVerification && <meta name="google-site-verification" content={site.analytics.googleSiteVerification} />}
 
+    <link rel="preload" href={karantinaHebrew} as="font" type="font/woff2" crossorigin />
     <link rel="icon" href={asset('favicon.svg')} type="image/svg+xml" />
     <link rel="icon" href={asset('favicon-32.png')} sizes="32x32" type="image/png" />
     <link rel="apple-touch-icon" href={asset('apple-touch-icon.png')} />

@@ -13,3 +13,6 @@ backend/lead-worker/.dev.vars
 .claude/
 backend/google-sheets/Code.local.gs
 backend/google-sheets/.secret
+dist-check/
+.taste-skill/
+shots/

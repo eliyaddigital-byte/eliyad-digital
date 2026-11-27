@@ -9,7 +9,7 @@
 interface Props { variant?: 'dark' | 'light'; markOnly?: boolean; class?: string; size?: 'sm' | 'md' | 'lg' }
 const { variant = 'dark', markOnly = false, class: cls = '', size = 'md' } = Astro.props;
 ---
-<span class:list={['logo', `logo--${variant}`, `logo--${size}`, cls]} dir="ltr">
+<span class:list={['logo', `logo--${variant}`, `logo--${size}`, cls]} dir="ltr" translate="no">
   {!markOnly && <span class="logo__word" aria-hidden="true">Boost</span>}
   <svg class="logo__mark" viewBox="0 0 100 120" aria-hidden="true" focusable="false">
     <path fill="var(--logo-accent, var(--orange))" fill-rule="evenodd" d="M10 4H55a28 28 0 0 1 8 54.8L90 116H63L38.5 62H34v-4H10Z M34 24V40H54a8 8 0 0 0 0-16Z" />

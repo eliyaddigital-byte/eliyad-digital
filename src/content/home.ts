@@ -30,20 +30,20 @@ export const platformsSection = {
   note: 'שמות הפלטפורמות הם סימנים מסחריים של בעליהם. אזכורם אינו מעיד על שותפות רשמית.',
 };
 
-export const platforms: { name: string; group: 'ads' | 'data' | 'automation' }[] = [
-  { name: 'Google Ads', group: 'ads' },
-  { name: 'Meta Ads', group: 'ads' },
-  { name: 'Instagram Ads', group: 'ads' },
-  { name: 'TikTok Ads', group: 'ads' },
-  { name: 'LinkedIn Ads', group: 'ads' },
-  { name: 'YouTube Ads', group: 'ads' },
+export const platforms: { name: string; group: 'ads' | 'data' | 'automation'; icon?: string }[] = [
+  { name: 'Google Ads', group: 'ads', icon: 'google-ads' },
+  { name: 'Meta Ads', group: 'ads', icon: 'meta' },
+  { name: 'Instagram Ads', group: 'ads', icon: 'instagram' },
+  { name: 'TikTok Ads', group: 'ads', icon: 'tiktok' },
+  { name: 'LinkedIn Ads', group: 'ads', icon: 'linkedin' },
+  { name: 'YouTube Ads', group: 'ads', icon: 'youtube' },
   { name: 'Taboola', group: 'ads' },
   { name: 'Outbrain', group: 'ads' },
-  { name: 'Google Analytics 4', group: 'data' },
-  { name: 'Google Tag Manager', group: 'data' },
+  { name: 'Google Analytics 4', group: 'data', icon: 'google-analytics' },
+  { name: 'Google Tag Manager', group: 'data', icon: 'google-tag-manager' },
   { name: 'Looker Studio', group: 'data' },
-  { name: 'Make', group: 'automation' },
-  { name: 'Zapier', group: 'automation' },
+  { name: 'Make', group: 'automation', icon: 'make' },
+  { name: 'Zapier', group: 'automation', icon: 'zapier' },
 ];
 
 export const pains = {

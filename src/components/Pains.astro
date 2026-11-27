@@ -10,7 +10,7 @@ import { pains } from '../content/home';
     <ul class="pains__list" role="list">
       {pains.items.map((p) => (
         <li>
-          <h3>{p.title}</h3>
+          <p class="pains__t">{p.title}</p>
           <p>{p.text}</p>
         </li>
       ))}
@@ -26,8 +26,8 @@ import { pains } from '../content/home';
   .pains__head { display: grid; gap: 1.25rem; align-content: start; }
   .pains__list { display: grid; grid-template-columns: 1fr; column-gap: 3rem; }
   .pains__list li { padding-block: 1.4rem; border-top: 1px solid var(--line); }
-  .pains__list h3 { font-size: var(--t-md); font-weight: 600; margin-bottom: 0.3rem; }
-  .pains__list p { color: var(--slate); }
+  .pains__t { font-size: var(--t-md); font-weight: 600; margin-bottom: 0.3rem; }
+  .pains__list p:not(.pains__t) { color: var(--slate); }
   .pains__closing {
     margin-top: clamp(3rem, 2rem + 3vw, 5rem); padding-top: 2rem; border-top: 3px solid var(--black);
     font-family: var(--display); font-weight: 700; font-size: var(--d-sm); line-height: 1.05; max-width: 28ch;
