@@ -1,17 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
-import Hero from '../components/Hero.astro';
-import Pains from '../components/Pains.astro';
-import Services from '../components/Services.astro';
-import Results from '../components/Results.astro';
-import Process from '../components/Process.astro';
-import Benefits from '../components/Benefits.astro';
-import About from '../components/About.astro';
-import VideoSection from '../components/VideoSection.astro';
-import Testimonials from '../components/Testimonials.astro';
-import Faq from '../components/Faq.astro';
-import LeadForm from '../components/LeadForm.astro';
+import HomeSections from '../components/HomeSections.astro';
 import Footer from '../components/Footer.astro';
 import MobileCta from '../components/MobileCta.astro';
 import { site } from '../config/site';
@@ -46,17 +36,7 @@ const servicesSchema = {
   schema={[faqSchema, servicesSchema]}
 >
   <Header slot="header" />
-  <Hero />
-  <Pains />
-  <Services />
-  <Results />
-  <Process />
-  <Benefits />
-  <About />
-  <VideoSection />
-  <Testimonials />
-  <Faq />
-  <LeadForm />
+  <HomeSections />
   <Footer slot="footer" />
   <MobileCta slot="footer" />
 </Base>

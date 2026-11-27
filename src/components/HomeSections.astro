@@ -1,0 +1,27 @@
+---
+/** כל סקשני עמוד הבית. preview=true מציג את כל מקומות המדיה עם סרטון הדוגמה ותוויות (עמוד /media-preview/) */
+import Hero from './Hero.astro';
+import Pains from './Pains.astro';
+import Vsl from './Vsl.astro';
+import Services from './Services.astro';
+import Results from './Results.astro';
+import Process from './Process.astro';
+import Benefits from './Benefits.astro';
+import About from './About.astro';
+import Testimonials from './Testimonials.astro';
+import Faq from './Faq.astro';
+import LeadForm from './LeadForm.astro';
+interface Props { preview?: boolean }
+const { preview = false } = Astro.props;
+---
+<Hero preview={preview} />
+<Pains />
+<Vsl preview={preview} />
+<Services />
+<Results preview={preview} />
+<Process preview={preview} />
+<Benefits />
+<About preview={preview} />
+<Testimonials preview={preview} />
+<Faq />
+<LeadForm preview={preview} />

@@ -1,0 +1,29 @@
+---
+/** עמוד תצוגה פנימי: כל מקומות המדיה באתר, ממוספרים, עם סרטון הדוגמה. לא מופיע בגוגל ולא מקושר מהאתר. */
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import HomeSections from '../components/HomeSections.astro';
+import Footer from '../components/Footer.astro';
+import { mediaSlots } from '../content/media';
+---
+<Base title="תצוגת מקומות מדיה" description="עמוד פנימי לבחירת תמונות וסרטונים." path="/media-preview/" noindex>
+  <Header slot="header" />
+  <aside class="mp-bar" aria-label="מקומות מדיה">
+    <div class="wrap">
+      <strong>עמוד תצוגה פנימי:</strong> כל מסגרת מקווקוות כתומה היא מקום לתמונה או סרטון. מספר המקום מופיע עליה.
+      <details>
+        <summary>רשימת כל {mediaSlots.length} המקומות</summary>
+        <ol>{mediaSlots.map((s) => <li><b>#{s.n}</b> {s.label} <small>({s.kind === 'video' ? 'סרטון' : s.kind === 'image' ? 'תמונה' : 'תמונה או סרטון'})</small></li>)}</ol>
+      </details>
+    </div>
+  </aside>
+  <HomeSections preview />
+  <Footer slot="footer" />
+</Base>
+
+<style>
+  .mp-bar { background: var(--black); color: var(--white); padding: 0.9rem 0; font-size: var(--t-sm); }
+  .mp-bar summary { cursor: pointer; color: var(--orange); font-weight: 600; margin-top: 0.4rem; }
+  .mp-bar ol { margin-top: 0.6rem; padding-inline-start: 0; list-style: none; display: grid; gap: 0.3rem; }
+  .mp-bar b { color: var(--orange); }
+</style>

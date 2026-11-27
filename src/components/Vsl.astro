@@ -1,0 +1,25 @@
+---
+/** סרטון היכרות / מכירה (מקום מדיה #2). מוצג רק כשיש קובץ, או בעמוד התצוגה. */
+import MediaSlot from './MediaSlot.astro';
+import { slot } from '../content/media';
+interface Props { preview?: boolean }
+const { preview = false } = Astro.props;
+const show = Boolean(slot('vsl').file) || preview;
+---
+{show && (
+  <section class="band band--fog vsl" id="video" aria-labelledby="vsl-title" data-section="video">
+    <div class="wrap vsl__grid">
+      <div class="vsl__copy">
+        <h2 id="vsl-title" class="h-section">דקה וחצי עם מי שינהל לך את הקמפיינים</h2>
+        <p class="lede">איך אנחנו עובדים, מה בודקים בשיחה הראשונה ולמה אנחנו מתעקשים למדוד עד העסקה.</p>
+      </div>
+      <MediaSlot id="vsl" preview={preview} class="vsl__media" alt="סרטון היכרות עם BoostRize" />
+    </div>
+  </section>
+)}
+
+<style>
+  .vsl__grid { display: grid; gap: 2.5rem; align-items: center; }
+  .vsl__copy { display: grid; gap: 1.25rem; }
+  @media (min-width: 1024px) { .vsl__grid { grid-template-columns: 0.8fr 1.2fr; gap: 4rem; } }
+</style>

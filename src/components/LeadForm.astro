@@ -6,6 +6,9 @@
  * - ראו INTEGRATIONS.md לחוזה ה-API.
  */
 import Icon from './Icon.astro';
+import MediaSlot from './MediaSlot.astro';
+interface Props { preview?: boolean }
+const { preview = false } = Astro.props;
 import { leadSection } from '../content/home';
 import { site, leadFormActive, hasDirectContact, whatsappUrl, telUrl, mailUrl } from '../config/site';
 import { withBase } from '../lib/text';
@@ -21,6 +24,7 @@ const cfg = {
     <div class="lead__copy">
       <h2 id="lead-title" class="h-section">{leadSection.title}</h2>
       <p class="lead__sub">{leadFormActive ? leadSection.subtitle : 'ספרו לנו על העסק בוואטסאפ או בטלפון. נעבור יחד על המספרים, נזהה איפה הכסף נוזל ונגיד בכנות אם ואיך אנחנו יכולים לעזור.'}</p>
+      <MediaSlot id="contact" preview={preview} class="lead__face" alt="מי שיחזור אליכם" />
       <ul class="lead__promises" role="list">
         {leadSection.promises.map((p) => <li><Icon name="check" size={18} stroke={3} />{p}</li>)}
       </ul>
@@ -317,6 +321,8 @@ const cfg = {
   .lead__layout { display: grid; gap: 3rem; align-items: start; }
   .lead__copy { display: grid; gap: 1.5rem; align-content: start; }
   .lead__sub { font-size: var(--t-md); max-width: 40ch; }
+  .lead__copy :global(.lead__face) { width: 120px; border-radius: 50%; }
+  .lead__copy :global(.lead__face.mslot--preview) { width: min(100%, 320px); border-radius: var(--r-panel); }
   .lead__promises { display: grid; gap: 0.6rem; font-weight: 500; }
   .lead__promises li { display: flex; gap: 0.6rem; align-items: center; }
   .lead__direct p { font-weight: 600; margin-bottom: 0.6rem; }

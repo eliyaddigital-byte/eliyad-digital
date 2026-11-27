@@ -1,5 +1,9 @@
 ---
+import MediaSlot from './MediaSlot.astro';
 import { processSection } from '../content/home';
+interface Props { preview?: boolean }
+const { preview = false } = Astro.props;
+
 import { whatsappUrl } from '../config/site';
 ---
 <section class="band band--black process" id="process" aria-labelledby="process-title" data-section="process">
@@ -8,6 +12,7 @@ import { whatsappUrl } from '../config/site';
       <h2 id="process-title" class="h-section">{processSection.title}</h2>
       <p class="lede">{processSection.subtitle}</p>
       <a class="btn btn--orange btn--lg" href={whatsappUrl || '#contact'} target={whatsappUrl ? '_blank' : undefined} rel={whatsappUrl ? 'noopener' : undefined} data-cta="process">מתחילים בשיחת היכרות</a>
+      <MediaSlot id="process" preview={preview} class="process__media" alt="עבודה על אסטרטגיה" />
     </div>
     <ol class="steps" role="list">
       {processSection.steps.map((s, i) => (
@@ -25,6 +30,7 @@ import { whatsappUrl } from '../config/site';
 
 <style>
   .process__layout { display: grid; gap: 3rem; }
+  .process__intro :global(.process__media) { width: 100%; margin-top: 1rem; }
   .process__intro { display: grid; gap: 1.5rem; justify-items: start; align-content: start; }
   .steps { counter-reset: s; }
   .step { display: grid; grid-template-columns: 4.5rem 1fr; gap: 1.25rem; padding-block: 1.5rem; border-top: 1px solid var(--line-dark); }

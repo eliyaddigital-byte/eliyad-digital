@@ -1,47 +1,55 @@
 ---
-/** המלצות – מוצג רק כשיש המלצות מאומתות עם אישור פרסום (src/content/proof.ts) */
-import Icon from './Icon.astro';
+/**
+ * המלצות – מוצג רק כשיש המלצות מאומתות עם אישור פרסום (src/content/proof.ts)
+ * או סרטוני המלצה במקומות מדיה #6–#8 (src/content/media.ts). בעמוד התצוגה מוצגים כל המקומות.
+ */
+import MediaSlot from './MediaSlot.astro';
 import { publishedTestimonials as items } from '../content/proof';
+import { slot } from '../content/media';
 import { withBase } from '../lib/text';
-const ytId = (u: string) => u.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/)?.[1];
+interface Props { preview?: boolean }
+const { preview = false } = Astro.props;
+const videoIds = ['testimonial-1', 'testimonial-2', 'testimonial-3'].filter((id) => preview || slot(id).file);
+const show = items.length > 0 || videoIds.length > 0;
 ---
-{items.length > 0 && (
-  <section class="band section--tint testimonials" id="testimonials" aria-labelledby="t-title" data-section="testimonials">
+{show && (
+  <section class="band t" id="testimonials" aria-labelledby="t-title" data-section="testimonials">
     <div class="wrap">
-      <div class="section-head">
-        <h2 id="t-title">לא צריך להאמין רק לנו</h2>
+      <div class="section-intro">
+        <h2 id="t-title" class="h-section">מה הלקוחות אומרים</h2>
       </div>
-      <ul class="t__grid" role="list">
-        {items.map((t, i) => (
-          <li class="t" style={`--i:${i % 3}`}>
-            <blockquote>
-              <span class="t__q" aria-hidden="true">”</span>
-              <p>{t.quote}</p>
-            </blockquote>
-            {t.videoUrl && ytId(t.videoUrl) && (
-              <a class="link-arrow t__video" href={t.videoUrl} target="_blank" rel="noopener">צפייה בהמלצה בווידאו <Icon name="play" size={16} /></a>
-            )}
-            <footer class="t__who">
-              {t.photo && <img src={withBase(t.photo)} alt="" width="52" height="52" loading="lazy" decoding="async" />}
-              <span><strong>{t.name}</strong><small>{[t.role, t.company].filter(Boolean).join(', ')}</small></span>
-              {t.logo && <img class="t__logo" src={withBase(t.logo)} alt={t.company || ''} width="80" height="32" loading="lazy" decoding="async" />}
-            </footer>
-          </li>
-        ))}
-      </ul>
+      {videoIds.length > 0 && (
+        <div class="t__videos">
+          {videoIds.map((id) => <MediaSlot id={id} preview={preview} alt="סרטון המלצה של לקוח" />)}
+        </div>
+      )}
+      {items.length > 0 && (
+        <ul class="t__grid" role="list">
+          {items.map((t) => (
+            <li class="t__card">
+              <blockquote><p>{t.quote}</p></blockquote>
+              <footer class="t__who">
+                {t.photo && <img src={withBase(t.photo)} alt="" width="52" height="52" loading="lazy" decoding="async" />}
+                <span><strong>{t.name}</strong><small>{[t.role, t.company].filter(Boolean).join(', ')}</small></span>
+              </footer>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   </section>
 )}
 
 <style>
-  .t__grid { display: grid; gap: 1.25rem; }
-  .t { display: flex; flex-direction: column; gap: 1.25rem; padding: 1.75rem; background: var(--white); border: 2px solid var(--black); border-radius: var(--r-field); }
-  .t blockquote { position: relative; font-size: var(--t-md); line-height: 1.55; }
-  .t__q { display: block; font-size: 4rem; line-height: 0.6; color: var(--orange); font-weight: 900; height: 1.6rem; }
-  .t__who { margin-top: auto; display: flex; align-items: center; gap: 0.8rem; }
+  .t__videos { display: grid; grid-auto-flow: column; grid-auto-columns: 78%; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 0.5rem; margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter); }
+  .t__videos > :global(*) { scroll-snap-align: start; }
+  .t__grid { display: grid; gap: 1.25rem; margin-top: 2rem; }
+  .t__card { display: grid; gap: 1.25rem; padding: 1.75rem; background: var(--fog); border-radius: var(--r-panel); }
+  .t__card blockquote { font-size: var(--t-md); line-height: 1.55; }
+  .t__who { display: flex; align-items: center; gap: 0.8rem; }
   .t__who img { border-radius: 50%; object-fit: cover; }
   .t__who span { display: grid; }
   .t__who small { color: var(--slate); }
-  .t__logo { margin-inline-start: auto; border-radius: 0 !important; object-fit: contain !important; }
+  @media (min-width: 720px) { .t__videos { grid-auto-flow: row; grid-template-columns: repeat(3, 1fr); overflow: visible; margin-inline: 0; padding-inline: 0; } }
   @media (min-width: 900px) { .t__grid { grid-template-columns: repeat(3, 1fr); } }
 </style>

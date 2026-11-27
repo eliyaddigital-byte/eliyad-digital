@@ -1,0 +1,52 @@
+---
+/**
+ * MediaSlot – מקום ממוספר לתמונה או סרטון.
+ * - יש קובץ (file) → מוצג באתר הציבורי.
+ * - אין קובץ + preview → סרטון הדוגמה עם תווית "#n: מה לשים כאן".
+ * - אין קובץ ולא preview → לא מוצג כלום.
+ */
+import { slot, previewMedia } from '../content/media';
+import { withBase } from '../lib/text';
+
+interface Props { id: string; preview?: boolean; class?: string; rounded?: boolean; controls?: boolean; alt?: string }
+const { id, preview = false, class: cls = '', rounded = true, controls, alt = '' } = Astro.props;
+const s = slot(id);
+const file = s.file || (preview ? previewMedia.file : '');
+const poster = s.file ? s.poster : preview ? previewMedia.poster : '';
+const isVideo = /\.(mp4|webm|mov)$/i.test(file);
+const showControls = controls ?? (s.kind === 'video' || id === 'vsl');
+const show = Boolean(file);
+---
+{show && (
+  <figure class:list={['mslot', cls, { 'mslot--round': rounded, 'mslot--preview': preview && !s.file }]} style={`--ar:${s.aspect}`} data-slot={s.id}>
+    {isVideo ? (
+      showControls ? (
+        <video controls preload="none" playsinline poster={poster ? withBase(`media/${poster}`) : undefined} aria-label={alt || s.label}>
+          <source src={withBase(`media/${file}`)} type="video/mp4" />
+        </video>
+      ) : (
+        <video autoplay muted loop playsinline preload="metadata" poster={poster ? withBase(`media/${poster}`) : undefined} aria-hidden="true">
+          <source src={withBase(`media/${file}`)} type="video/mp4" />
+        </video>
+      )
+    ) : (
+      <img src={withBase(`media/${file}`)} alt={alt} loading="lazy" decoding="async" width="1200" height="900" />
+    )}
+    {preview && !s.file && (
+      <figcaption class="mslot__tag"><b>#{s.n}</b> {s.label}</figcaption>
+    )}
+  </figure>
+)}
+
+<style>
+  .mslot { position: relative; margin: 0; aspect-ratio: var(--ar); overflow: hidden; background: #111; }
+  .mslot--round { border-radius: var(--r-panel); }
+  .mslot video, .mslot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .mslot--preview { outline: 3px dashed var(--orange); outline-offset: 4px; }
+  .mslot__tag {
+    position: absolute; inset-inline: 0.6rem; top: 0.6rem; z-index: 2;
+    background: var(--black); color: var(--white); padding: 0.45rem 0.75rem; border-radius: 10px;
+    font-size: var(--t-sm); line-height: 1.35; box-shadow: 0 0 0 2px var(--orange);
+  }
+  .mslot__tag b { color: var(--orange); font-size: 1.05em; margin-inline-end: 0.25rem; }
+</style>

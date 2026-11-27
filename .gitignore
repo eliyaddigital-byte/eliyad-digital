@@ -16,3 +16,5 @@ backend/google-sheets/.secret
 dist-check/
 .taste-skill/
 shots/
+.taste-skill-report*.txt
+.tsr.txt

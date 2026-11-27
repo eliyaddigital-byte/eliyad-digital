@@ -7,6 +7,7 @@ export const GET: APIRoute = ({ site }) => {
     'User-agent: *',
     'Allow: /',
     `Disallow: ${base}thank-you/`,
+    `Disallow: ${base}media-preview/`,
     '',
     `Sitemap: ${root}sitemap-index.xml`,
     '',

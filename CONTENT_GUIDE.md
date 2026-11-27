@@ -35,11 +35,12 @@ social: { instagram: 'https://instagram.com/...', ... }
 - תמונת מייסד: `aboutSection.founder.image` (וגם `name`, `role`). כשיש תמונה, היא מחליפה את הגרפיקה
 - לוגו לקוח: שדה `logo` ב-proof.ts
 
-## 5. סרטון VSL: `src/content/home.ts` → `video`
-```ts
-export const video = { enabled: true, provider: 'youtube', id: 'dQw4w9WgXcQ', poster: '', title: '...', eyebrow: '...' };
-```
-`provider`: `youtube` (מזהה מה-URL), `vimeo` (מספר), או `file` (נתיב ב-public). עד שמוגדר, הסקשן מוסתר.
+## 5. תמונות וסרטונים (מקומות מדיה): `src/content/media.ts`
+באתר יש 10 מקומות ממוספרים לתמונות וסרטונים: ויז׳ואל ראשי, סרטון היכרות, דשבורד, תמונת עבודה, תמונת מייסד, 3 סרטוני המלצה, תוצאות לקוח ותמונה ליד יצירת הקשר.
+- **לראות את כל המקומות:** `/media-preview/` (עמוד פנימי שלא מופיע בגוגל). כל מקום מסומן במסגרת מקווקוות עם המספר שלו.
+- **למלא מקום:** מעלים את הקובץ ל-`public/media/` וכותבים את שמו בשדה `file` של המקום. לדוגמה: `{ n: 5, id: 'founder', ..., file: 'founder.webp' }`
+- מקום ריק פשוט לא מוצג באתר הציבורי.
+- סרטון: MP4 (H.264), עד כ-10MB. תמונה: WebP או JPG, עד כ-300KB. קובץ גדול יותר? Claude יכווץ אותו.
 
 ## 6. מדידה וטופס
 מגדירים ב-GitHub Variables (ראו [DEPLOYMENT.md](DEPLOYMENT.md)). אין צורך לגעת בקוד.

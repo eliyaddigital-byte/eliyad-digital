@@ -1,5 +1,9 @@
 ---
+import MediaSlot from './MediaSlot.astro';
 import { aboutSection, platforms, platformsSection } from '../content/home';
+interface Props { preview?: boolean }
+const { preview = false } = Astro.props;
+
 import { withBase } from '../lib/text';
 const f = aboutSection.founder;
 ---
@@ -15,6 +19,7 @@ const f = aboutSection.founder;
       </dl>
     </div>
     <aside class="about__side" aria-labelledby="platforms-title">
+      <MediaSlot id="founder" preview={preview} class="about__founder" alt={f.name || 'המייסד של BoostRize'} />
       {f.image && (
         <figure class="founder">
           <img src={withBase(f.image)} alt={f.name ? `${f.name}${f.role ? `, ${f.role}` : ''}` : 'המייסד'} width="560" height="680" loading="lazy" decoding="async" />
@@ -40,6 +45,7 @@ const f = aboutSection.founder;
   .about__values dt { font-weight: 600; }
   .about__values dd { color: var(--slate); }
   .about__side { background: var(--fog); border-radius: var(--r-panel); padding: clamp(1.5rem, 1rem + 2vw, 2.5rem); align-self: start; }
+  .about__side :global(.about__founder) { margin-bottom: 1.75rem; }
   .about__side-title { font-size: var(--t-md); font-weight: 600; margin-bottom: 1.25rem; }
   .platforms { display: flex; flex-wrap: wrap; gap: 0.5rem; }
   .platforms li { display: inline-flex; align-items: center; gap: 0.45rem; background: var(--white); border-radius: var(--r-pill); padding: 0.45rem 0.9rem; font-weight: 600; font-size: var(--t-sm); }

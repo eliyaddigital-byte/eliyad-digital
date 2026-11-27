@@ -133,3 +133,6 @@ select.input { appearance: none; background-image: url("data:image/svg+xml,%3Csv
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; animation-delay: 0ms !important; }
 }
+
+/* Media-slot preview frames on orange grounds */
+section.hero .mslot.mslot--preview, section.band--orange .mslot.mslot--preview { outline-color: var(--black); }

@@ -3,7 +3,11 @@
  * "Where measurement stops" – the funnel from ad to sale, showing what typical
  * reports cover vs. what we measure. Case studies render here only when verified.
  */
+import MediaSlot from './MediaSlot.astro';
 import { resultsSection } from '../content/home';
+interface Props { preview?: boolean }
+const { preview = false } = Astro.props;
+
 import { publishedCases } from '../content/proof';
 import { withBase } from '../lib/text';
 
@@ -31,6 +35,7 @@ function chartPath(points: { y: number }[], w = 300, h = 110) {
       </div>
     </figure>
 
+    <MediaSlot id="dashboard" preview={preview} class="measure__shot" alt="דשבורד ביצועים" />
     <dl class="metrics">
       {resultsSection.metrics.map((m) => (
         <div>
@@ -40,6 +45,7 @@ function chartPath(points: { y: number }[], w = 300, h = 110) {
       ))}
     </dl>
 
+    <MediaSlot id="case" preview={preview} class="measure__case" alt="תוצאות לקוח" />
     {publishedCases.length > 0 && (
       <div class="cases">
         <h3 class="cases__title">תוצאות של לקוחות</h3>
@@ -93,6 +99,7 @@ function chartPath(points: { y: number }[], w = 300, h = 110) {
   .funnel__b--ours::before { color: var(--orange); }
   .funnel__b--ours::before { border-width: 3px; }
 
+  :global(.measure__shot), :global(.measure__case) { margin-top: clamp(2.5rem, 2rem + 2vw, 4rem); max-width: 980px; }
   .metrics { display: grid; gap: 0; margin-top: clamp(3rem, 2rem + 3vw, 5rem); border-top: 3px solid var(--black); }
   .metrics > div { padding: 1.25rem 0; border-bottom: 1px solid var(--line); display: grid; gap: 0.2rem; }
   .metrics dt { font-weight: 600; font-size: var(--t-md); }
