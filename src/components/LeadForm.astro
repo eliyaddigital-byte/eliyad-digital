@@ -89,6 +89,16 @@ const cfg = {
                 <select class="input" id="lf-budget" name="budget"><option value="">בחירה</option>{leadSection.budgets.map((o) => <option>{o}</option>)}</select>
               </div>
             </div>
+            <div class="lf__row">
+              <div class="field">
+                <label for="lf-deal">שווי עסקה ממוצע <span class="opt">(אופציונלי)</span></label>
+                <select class="input" id="lf-deal" name="deal_value"><option value="">בחירה</option>{leadSection.dealValues.map((o) => <option>{o}</option>)}</select>
+              </div>
+              <div class="field">
+                <label for="lf-adv">פרסמתם בעבר? <span class="opt">(אופציונלי)</span></label>
+                <select class="input" id="lf-adv" name="advertised_before"><option value="">בחירה</option>{leadSection.advertisedBefore.map((o) => <option>{o}</option>)}</select>
+              </div>
+            </div>
             <fieldset class="field lf__goals">
               <legend>מה המטרה העיקרית? <span class="opt">(אופציונלי)</span></legend>
               <div class="lf__chips">
@@ -266,6 +276,8 @@ const cfg = {
         website: String(fd.get('website') || '').trim(),
         industry: String(fd.get('industry') || ''),
         budget: String(fd.get('budget') || ''),
+        deal_value: String(fd.get('deal_value') || ''),
+        advertised_before: String(fd.get('advertised_before') || ''),
         goal: String(fd.get('goal') || ''),
         marketing_consent: fd.get('marketing_consent') === 'yes',
         form_variant: cfg.variant,

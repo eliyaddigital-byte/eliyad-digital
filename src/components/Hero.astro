@@ -31,6 +31,10 @@ const waBase = site.contact.whatsapp ? `https://wa.me/${site.contact.whatsapp}` 
       })}
     </h1>
         <p class="hero__sub">{hero.subheadline}</p>
+        <div class="hero__fit">
+          <p>{hero.audienceLabel}:</p>
+          <ul role="list">{hero.audience.map((a) => <li><Icon name="check" size={16} stroke={3} />{a}</li>)}</ul>
+        </div>
         <div class="hero__ctas">
           {whatsappUrl ? (
             <a class="btn btn--black btn--lg" href={whatsappUrl} target="_blank" rel="noopener" data-cta="hero-whatsapp"><Icon name="whatsapp" size={22} />שליחת הודעה בוואטסאפ</a>
@@ -53,7 +57,7 @@ const waBase = site.contact.whatsapp ? `https://wa.me/${site.contact.whatsapp}` 
         <div class="calc__row">
           <label for="calc-budget">תקציב פרסום בחודש</label>
           <output for="calc-budget" data-out="budget">10,000 ₪</output>
-          <input id="calc-budget" type="range" min="1000" max="100000" step="500" value="10000" data-in="budget" />
+          <input id="calc-budget" type="range" min="3000" max="100000" step="500" value="10000" data-in="budget" />
         </div>
         <div class="calc__row">
           <label for="calc-leads">פניות (לידים) בחודש</label>
@@ -152,7 +156,12 @@ const waBase = site.contact.whatsapp ? `https://wa.me/${site.contact.whatsapp}` 
   .hero__grid { display: grid; gap: clamp(2.5rem, 4vw, 4.5rem); align-items: center; }
   .hero__copy { display: grid; align-content: center; }
   .hero__sub { margin-top: 1.75rem; font-size: clamp(1.2rem, 1.05rem + 0.6vw, 1.5rem); line-height: 1.5; max-width: 34ch; }
-  .hero__ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
+  .hero__fit { margin-top: 1.5rem; display: grid; gap: 0.5rem; }
+  .hero__fit p { font-weight: 600; font-size: var(--t-sm); }
+  .hero__fit ul { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .hero__fit li { display: inline-flex; align-items: center; gap: 0.35rem; background: var(--black); color: var(--white); border-radius: var(--r-pill); padding: 0.35rem 0.8rem; font-size: var(--t-sm); font-weight: 500; }
+  .hero__fit li :global(svg) { color: var(--orange); }
+  .hero__ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.75rem; }
   .hero__copy :global(.hero__media) { margin-top: 1.75rem; width: min(100%, 300px); }
   .hero__tools { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1rem; margin-top: 2.25rem; font-weight: 500; }
   .hero__tools ul { display: flex; gap: 0.5rem; }

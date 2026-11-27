@@ -54,6 +54,8 @@ type Lead = {
   website: string;
   industry: string;
   budget: string;
+  deal_value: string;
+  advertised_before: string;
   goal: string;
   marketing_consent: boolean;
   form_variant: string;
@@ -210,6 +212,8 @@ function sanitize(b: Record<string, any>, req: Request): { lead: Lead; invalid: 
     website,
     industry: clean(b.industry, 60),
     budget: clean(b.budget, 60),
+    deal_value: clean(b.deal_value, 60),
+    advertised_before: clean(b.advertised_before, 60),
     goal: clean(b.goal, 80),
     marketing_consent: b.marketing_consent === true,
     form_variant: clean(b.form_variant, 40),

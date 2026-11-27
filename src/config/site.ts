@@ -33,7 +33,7 @@ export const site = {
   contact: {
     phone: '058-655-4282', // לדוגמה: '050-0000000'
     whatsapp: '972586554282', // בפורמט בינלאומי בלי + ובלי מקפים, לדוגמה: '972500000000'
-    whatsappMessage: 'היי BoostRize, אשמח לשמוע פרטים על ניהול קמפיינים לעסק שלי',
+    whatsappMessage: 'היי BoostRize, אשמח לשמוע פרטים על ניהול קמפיינים.\nהעסק שלי: \nעסקה ממוצעת: \nתקציב פרסום חודשי: ',
     email: 'eliyaddigital@gmail.com',
     address: '', // TODO (אופציונלי)
     hours: '', // לדוגמה: 'א׳–ה׳, 09:00–18:00'  TODO

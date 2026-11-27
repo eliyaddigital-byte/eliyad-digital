@@ -25,6 +25,8 @@ const COLUMNS = [
   ['website', 'אתר'],
   ['industry', 'תחום'],
   ['budget', 'תקציב'],
+  ['deal_value', 'שווי עסקה'],
+  ['advertised_before', 'פרסמו בעבר'],
   ['goal', 'מטרה'],
   ['marketing_consent', 'הסכמה לדיוור'],
   ['source', 'מקור'],
@@ -103,7 +105,7 @@ function notify_(lead) {
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
   const rows = [
     ['שם', lead.name], ['טלפון', lead.phone], ['אימייל', lead.email], ['עסק', lead.business], ['אתר', lead.website],
-    ['תחום', lead.industry], ['תקציב', lead.budget], ['מטרה', lead.goal],
+    ['תחום', lead.industry], ['תקציב', lead.budget], ['שווי עסקה', lead.deal_value], ['פרסמו בעבר', lead.advertised_before], ['מטרה', lead.goal],
     ['מקור', [lead.utm_source, lead.utm_medium, lead.utm_campaign].filter(String).join(' / ') || lead.source],
     ['עמוד נחיתה', lead.landing_page],
   ].filter((r) => r[1]);
