@@ -1,16 +1,12 @@
 ---
-/** Sticky CTA במובייל – מופיע אחרי ה-Hero ונעלם כשסקשן יצירת הקשר על המסך */
+/** Sticky CTA במובייל – מוביל לשאלון; אייקון וואטסאפ לפנייה ישירה. נעלם כשהשאלון על המסך */
 import Icon from './Icon.astro';
-import { site, whatsappUrl, telUrl } from '../config/site';
+import { whatsappUrl } from '../config/site';
 ---
 <div class="mcta" data-mobile-cta aria-hidden="true">
-  {whatsappUrl ? (
-    <a class="btn btn--black mcta__main" href={whatsappUrl} target="_blank" rel="noopener" data-cta="mobile-sticky" data-cta-location="mobile-sticky" tabindex="-1"><Icon name="whatsapp" size={20} />שליחת הודעה בוואטסאפ</a>
-  ) : (
-    <a class="btn btn--black mcta__main" href="#contact" data-cta="mobile-sticky" tabindex="-1">{site.cta.primary}</a>
-  )}
-  {telUrl && (
-    <a class="mcta__icon" href={telUrl} aria-label={`חיוג ל-${site.contact.phone}`} data-cta-location="mobile-sticky" tabindex="-1"><Icon name="phone" size={22} /></a>
+  <a class="btn btn--black mcta__main" href="#contact" data-cta="mobile-sticky-quiz" tabindex="-1">בדיקה בדקה: איפה השיווק נתקע?</a>
+  {whatsappUrl && (
+    <a class="mcta__icon" href={whatsappUrl} target="_blank" rel="noopener" aria-label="וואטסאפ" data-cta-location="mobile-sticky" tabindex="-1"><Icon name="whatsapp" size={24} /></a>
   )}
 </div>
 
@@ -21,7 +17,7 @@ import { site, whatsappUrl, telUrl } from '../config/site';
     background: var(--orange); transform: translateY(110%); transition: transform 280ms var(--ease);
   }
   .mcta:global(.is-visible) { transform: none; }
-  .mcta__main { flex: 1; min-height: 52px; }
+  .mcta__main { flex: 1; min-height: 52px; font-size: var(--t-base); }
   .mcta__icon { width: 52px; height: 52px; flex: none; display: grid; place-items: center; border-radius: 50%; background: var(--white); color: var(--black); }
   @media (min-width: 900px) { .mcta { display: none; } }
 </style>

@@ -1,379 +1,341 @@
 ---
 /**
- * טופס לידים רב-שלבי.
- * - פעיל רק כשמוגדר site.leads.endpoint (Backend מאובטח). אחרת מוצגת הודעה ולא טופס "מזויף".
- * - הודעת הצלחה / מעבר לעמוד תודה רק אחרי שהשרת אישר קבלה (ok: true).
- * - ראו INTEGRATIONS.md לחוזה ה-API.
+ * שאלון "איפה השיווק נתקע אצלכם" – טופס הלידים הראשי.
+ * שלב אחר שלב (בנוי קודם כל למובייל). בסיום:
+ *  1. התשובות נשלחות ל-Google Sheets (site.leads.sheetEndpoint – Apps Script)
+ *  2. נפתחת הודעת וואטסאפ מסודרת עם כל הפרטים אל מספר העסק
+ * אם עדיין לא הוגדר sheetEndpoint – רק שלב הוואטסאפ פועל, כך שאף ליד לא הולך לאיבוד.
  */
 import Icon from './Icon.astro';
 import MediaSlot from './MediaSlot.astro';
+import { quiz } from '../content/quiz';
+import { site } from '../config/site';
+import { withBase } from '../lib/text';
 interface Props { preview?: boolean }
 const { preview = false } = Astro.props;
-import { leadSection } from '../content/home';
-import { site, leadFormActive, hasDirectContact, whatsappUrl, telUrl, mailUrl } from '../config/site';
-import { withBase } from '../lib/text';
-const cfg = {
-  endpoint: site.leads.endpoint,
-  turnstile: site.leads.turnstileSiteKey,
-  variant: site.leads.formVariant,
-  thankYou: withBase('/thank-you/'),
-};
+const s = quiz.steps;
+const cfg = { endpoint: site.leads.sheetEndpoint, wa: site.contact.whatsapp, variant: site.leads.formVariant };
+const total = 6;
 ---
 <section class="band band--orange lead" id="contact" aria-labelledby="lead-title" data-section="contact">
   <div class="wrap lead__layout">
     <div class="lead__copy">
-      <h2 id="lead-title" class="h-section">{leadSection.title}</h2>
-      <p class="lead__sub">{leadFormActive ? leadSection.subtitle : 'ספרו לנו על העסק בוואטסאפ או בטלפון. נעבור יחד על המספרים, נזהה איפה הכסף נוזל ונגיד בכנות אם ואיך אנחנו יכולים לעזור.'}</p>
+      <h2 id="lead-title" class="h-section">{quiz.title}</h2>
+      <p class="lead__sub">{quiz.subtitle}</p>
       <MediaSlot id="contact" preview={preview} class="lead__face" alt="מי שיחזור אליכם" />
-      <ul class="lead__promises" role="list">
-        {leadSection.promises.map((p) => <li><Icon name="check" size={18} stroke={3} />{p}</li>)}
-      </ul>
-      {hasDirectContact && leadFormActive && (
-        <div class="lead__direct">
-          <p>מעדיפים לדבר עכשיו?</p>
-          <div>
-            {whatsappUrl && <a class="btn btn--outline" href={whatsappUrl} target="_blank" rel="noopener" data-cta-location="contact"><Icon name="whatsapp" size={20} /> וואטסאפ</a>}
-            {telUrl && <a class="btn btn--outline" href={telUrl} data-cta-location="contact"><Icon name="phone" size={20} /><span dir="ltr">{site.contact.phone}</span></a>}
-            {mailUrl && <a class="btn btn--outline" href={mailUrl} data-cta-location="contact"><Icon name="mail" size={20} /> מייל</a>}
-          </div>
-        </div>
-      )}
     </div>
 
     <div class="lead__card">
-      {leadFormActive ? (
-        <form class="lf" novalidate data-lead-form data-config={JSON.stringify(cfg)} aria-describedby="lf-privacy">
-          <div class="lf__progress" aria-hidden="true"><span data-lf-bar></span></div>
-          <p class="lf__stepinfo" aria-live="polite" data-lf-stepinfo>שלב 1 מתוך 2</p>
-
-          <fieldset class="lf__step" data-step="1">
-            <legend class="lf__legend">איך נחזור אליך?</legend>
-            <div class="field">
-              <label for="lf-name">שם מלא</label>
-              <input class="input" id="lf-name" name="name" type="text" autocomplete="name" required minlength="2" maxlength="80" aria-describedby="lf-name-err" />
-              <p class="field-error" id="lf-name-err" aria-live="polite"></p>
-            </div>
-            <div class="field">
-              <label for="lf-phone">טלפון</label>
-              <input class="input" id="lf-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required maxlength="20" dir="ltr" aria-describedby="lf-phone-err" />
-              <p class="field-error" id="lf-phone-err" aria-live="polite"></p>
-            </div>
-            <div class="field">
-              <label for="lf-email">אימייל</label>
-              <input class="input" id="lf-email" name="email" type="email" autocomplete="email" spellcheck="false" required maxlength="120" dir="ltr" aria-describedby="lf-email-err" />
-              <p class="field-error" id="lf-email-err" aria-live="polite"></p>
-            </div>
-            <button type="button" class="btn btn--black btn--lg btn--block" data-lf-next>המשך</button>
-          </fieldset>
-
-          <fieldset class="lf__step" data-step="2" hidden>
-            <legend class="lf__legend">ספר לנו קצת על העסק <span class="opt">(אופציונלי, עוזר לנו להתכונן)</span></legend>
-            <div class="lf__row">
-              <div class="field">
-                <label for="lf-business">שם העסק <span class="opt">(אופציונלי)</span></label>
-                <input class="input" id="lf-business" name="business" type="text" autocomplete="organization" maxlength="100" />
-              </div>
-              <div class="field">
-                <label for="lf-website">אתר העסק <span class="opt">(אופציונלי)</span></label>
-                <input class="input" id="lf-website" name="website" type="text" inputmode="url" autocomplete="url" maxlength="200" dir="ltr" placeholder="www." aria-describedby="lf-website-err" />
-                <p class="field-error" id="lf-website-err" aria-live="polite"></p>
-              </div>
-            </div>
-            <div class="lf__row">
-              <div class="field">
-                <label for="lf-industry">תחום פעילות <span class="opt">(אופציונלי)</span></label>
-                <select class="input" id="lf-industry" name="industry"><option value="">בחירה</option>{leadSection.industries.map((o) => <option>{o}</option>)}</select>
-              </div>
-              <div class="field">
-                <label for="lf-budget">תקציב פרסום חודשי <span class="opt">(אופציונלי)</span></label>
-                <select class="input" id="lf-budget" name="budget"><option value="">בחירה</option>{leadSection.budgets.map((o) => <option>{o}</option>)}</select>
-              </div>
-            </div>
-            <div class="lf__row">
-              <div class="field">
-                <label for="lf-deal">שווי עסקה ממוצע <span class="opt">(אופציונלי)</span></label>
-                <select class="input" id="lf-deal" name="deal_value"><option value="">בחירה</option>{leadSection.dealValues.map((o) => <option>{o}</option>)}</select>
-              </div>
-              <div class="field">
-                <label for="lf-adv">פרסמתם בעבר? <span class="opt">(אופציונלי)</span></label>
-                <select class="input" id="lf-adv" name="advertised_before"><option value="">בחירה</option>{leadSection.advertisedBefore.map((o) => <option>{o}</option>)}</select>
-              </div>
-            </div>
-            <fieldset class="field lf__goals">
-              <legend>מה המטרה העיקרית? <span class="opt">(אופציונלי)</span></legend>
-              <div class="lf__chips">
-                {leadSection.goals.map((g, i) => (
-                  <label class="chip"><input type="radio" name="goal" value={g} id={`lf-goal-${i}`} /><span>{g}</span></label>
-                ))}
-              </div>
-            </fieldset>
-
-            <label class="check lf__consent">
-              <input type="checkbox" name="marketing_consent" value="yes" />
-              <span>אשמח לקבל מ-{site.brand.name} עדכונים ותוכן מקצועי במייל או בוואטסאפ. אפשר להסיר בכל עת. <span class="opt">(אופציונלי)</span></span>
-            </label>
-
-            <div class="lf__hp" aria-hidden="true">
-              <label for="lf-company-url">השאירו ריק</label>
-              <input id="lf-company-url" name="company_url" type="text" tabindex="-1" autocomplete="off" />
-            </div>
-            <div data-lf-turnstile></div>
-
-            <div class="lf__actions">
-              <button type="button" class="lf__back" data-lf-back>חזרה לשלב הקודם</button>
-              <button type="submit" class="btn btn--black btn--lg" data-lf-submit>
-                <span data-lf-submit-label>שליחה ותיאום שיחה</span>
-              </button>
-            </div>
-          </fieldset>
-
-          <div class="lf__status" role="alert" aria-live="assertive" data-lf-status hidden></div>
-          <p class="lf__privacy" id="lf-privacy">
-            <Icon name="shield" size={16} />
-            <span>הפרטים ישמשו ליצירת קשר בנוגע לפנייתך בלבד, בהתאם ל<a href={withBase('/privacy/')}>מדיניות הפרטיות</a>. מסירת הפרטים אינה חובה על פי חוק, אך בלעדיהם לא נוכל לחזור אליך.</span>
-          </p>
-        </form>
-      ) : (
-        <div class="lf-off" data-lead-form-inactive>
-          <span class="lf-off__icon"><Icon name="clock" size={28} /></span>
-          <h3>הדרך הכי מהירה לדבר איתנו</h3>
-          <p>שלחו הודעה עם כמה מילים על העסק, ונחזור אליכם לתיאום שיחה.</p>
-          {hasDirectContact ? (
-            <div class="lf-off__links">
-              {whatsappUrl && <a class="btn btn--black btn--block" href={whatsappUrl} target="_blank" rel="noopener" data-cta-location="contact-inactive"><Icon name="whatsapp" size={20} />שליחת הודעה בוואטסאפ</a>}
-              {telUrl && <a class="btn btn--outline btn--block" href={telUrl} data-cta-location="contact-inactive"><Icon name="phone" size={20} /><span dir="ltr">{site.contact.phone}</span></a>}
-              {mailUrl && <a class="btn btn--outline btn--block" href={mailUrl} data-cta-location="contact-inactive"><Icon name="mail" size={20} /> {site.contact.email}</a>}
-            </div>
-          ) : (
-            <p class="lf-off__note">בינתיים אפשר להתעדכן כאן שוב בקרוב.</p>
-          )}
+      <form class="qz" novalidate data-quiz data-config={JSON.stringify(cfg)}>
+        <div class="qz__top">
+          <button type="button" class="qz__back" data-back hidden aria-label="לשאלה הקודמת"><Icon name="arrow-left" size={20} class="qz__back-ic" /></button>
+          <div class="qz__progress" role="progressbar" aria-label="התקדמות בשאלון" aria-valuemin="1" aria-valuemax={total} aria-valuenow="1"><span data-bar></span></div>
+          <span class="qz__count" data-count>1/{total}</span>
         </div>
-      )}
+
+        <fieldset class="qz__step" data-step="1">
+          <legend class="qz__q">{s.stuck.q}</legend>
+          <p class="qz__hint">{s.stuck.hint}</p>
+          <div class="qz__opts">
+            {s.stuck.options.map((o) => (
+              <label class="opt"><input type="checkbox" name="stuck" value={o} /><span class="opt__box"><span class="opt__tick" aria-hidden="true"></span>{o}</span></label>
+            ))}
+          </div>
+          <p class="qz__err" data-err aria-live="polite"></p>
+          <button type="button" class="btn btn--black btn--lg btn--block" data-next>המשך</button>
+        </fieldset>
+
+        <fieldset class="qz__step" data-step="2" hidden>
+          <legend class="qz__q">{s.improve.q}</legend>
+          <p class="qz__hint">{s.improve.hint}</p>
+          <div class="qz__opts">
+            {s.improve.options.map((o) => (
+              <label class="opt opt--rich"><input type="checkbox" name="improve" value={o.title} /><span class="opt__box"><span class="opt__tick" aria-hidden="true"></span><span><strong>{o.title}</strong><small>{o.text}</small></span></span></label>
+            ))}
+          </div>
+          <p class="qz__err" data-err aria-live="polite"></p>
+          <button type="button" class="btn btn--black btn--lg btn--block" data-next>המשך</button>
+        </fieldset>
+
+        <fieldset class="qz__step" data-step="3" hidden>
+          <legend class="qz__q">{s.budgetPlanned.q}</legend>
+          <p class="qz__hint">{s.budgetPlanned.hint}</p>
+          <div class="qz__opts">
+            {s.budgetPlanned.options.map((o) => (
+              <label class="opt opt--radio"><input type="radio" name="budget_planned" value={o} data-auto /><span class="opt__box"><span class="opt__tick" aria-hidden="true"></span>{o}</span></label>
+            ))}
+          </div>
+          <p class="qz__err" data-err aria-live="polite"></p>
+        </fieldset>
+
+        <fieldset class="qz__step" data-step="4" hidden>
+          <legend class="qz__q">{s.budgetNow.q}</legend>
+          <p class="qz__hint">{s.budgetNow.hint}</p>
+          <div class="qz__opts">
+            {s.budgetNow.options.map((o) => (
+              <label class="opt opt--radio"><input type="radio" name="budget_now" value={o} data-auto /><span class="opt__box"><span class="opt__tick" aria-hidden="true"></span>{o}</span></label>
+            ))}
+          </div>
+          <p class="qz__err" data-err aria-live="polite"></p>
+        </fieldset>
+
+        <fieldset class="qz__step" data-step="5" hidden>
+          <legend class="qz__q">{s.assets.q}</legend>
+          <p class="qz__hint">{s.assets.hint}</p>
+          <div class="field"><label for="qz-ig">אינסטגרם</label><input class="input" id="qz-ig" name="instagram" type="text" inputmode="url" autocomplete="off" spellcheck="false" dir="ltr" placeholder="instagram.com/…" maxlength="300" /></div>
+          <div class="field"><label for="qz-fb">פייסבוק</label><input class="input" id="qz-fb" name="facebook" type="text" inputmode="url" autocomplete="off" spellcheck="false" dir="ltr" placeholder="facebook.com/…" maxlength="300" /></div>
+          <div class="field"><label for="qz-web">אתר</label><input class="input" id="qz-web" name="website" type="text" inputmode="url" autocomplete="url" spellcheck="false" dir="ltr" placeholder="www.…" maxlength="300" /></div>
+          <div class="field"><label for="qz-other">נכסים נוספים <span class="opt-l">(טיקטוק, יוטיוב, דף נחיתה…)</span></label><input class="input" id="qz-other" name="other_assets" type="text" autocomplete="off" spellcheck="false" maxlength="500" /></div>
+          <button type="button" class="btn btn--black btn--lg btn--block" data-next>המשך</button>
+        </fieldset>
+
+        <fieldset class="qz__step" data-step="6" hidden>
+          <legend class="qz__q">{s.contact.q}</legend>
+          <p class="qz__hint">{s.contact.hint}</p>
+          <div class="field">
+            <label for="qz-name">שם מלא</label>
+            <input class="input" id="qz-name" name="name" type="text" autocomplete="name" required maxlength="80" aria-describedby="qz-name-err" />
+            <p class="field-error" id="qz-name-err" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label for="qz-phone">טלפון</label>
+            <input class="input" id="qz-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required maxlength="20" dir="ltr" aria-describedby="qz-phone-err" />
+            <p class="field-error" id="qz-phone-err" aria-live="polite"></p>
+          </div>
+          <div class="qz__hp" aria-hidden="true"><label for="qz-company-url">השאירו ריק</label><input id="qz-company-url" name="company_url" type="text" tabindex="-1" autocomplete="off" /></div>
+          <button type="submit" class="btn btn--black btn--lg btn--block" data-submit><Icon name="whatsapp" size={22} /><span data-submit-label>שליחה בוואטסאפ</span></button>
+          <p class="qz__privacy"><Icon name="shield" size={16} /><span>הפרטים ישמשו רק כדי לחזור אליכם, לפי <a href={withBase('/privacy/')}>מדיניות הפרטיות</a>.</span></p>
+        </fieldset>
+
+        <div class="qz__done" data-done hidden tabindex="-1">
+          <span class="qz__done-badge"><Icon name="check" size={30} stroke={3} /></span>
+          <p class="qz__q" data-done-title>כמעט סיימנו</p>
+          <p class="qz__hint">נשאר רק לשלוח את ההודעה בוואטסאפ, ונחזור אליכם בהקדם.</p>
+          <a class="btn btn--black btn--lg btn--block" href="#" target="_blank" rel="noopener" data-wa-link data-cta="quiz-whatsapp-done"><Icon name="whatsapp" size={22} />פתיחת וואטסאפ ושליחה</a>
+        </div>
+      </form>
     </div>
   </div>
 </section>
 
 <script>
-  import { getAttribution, getVariant, track } from '../scripts/tracking';
+  import { getAttribution, track } from '../scripts/tracking';
+  const form = document.querySelector<HTMLFormElement>('[data-quiz]');
+  if (form) init(form);
 
-  const form = document.querySelector<HTMLFormElement>('[data-lead-form]');
-  if (form) initForm(form);
-
-  function initForm(form: HTMLFormElement) {
-    const cfg = JSON.parse(form.dataset.config || '{}') as { endpoint: string; turnstile: string; variant: string; thankYou: string };
-    const steps = [...form.querySelectorAll<HTMLFieldSetElement>('.lf__step')];
-    const bar = form.querySelector<HTMLElement>('[data-lf-bar]')!;
-    const info = form.querySelector<HTMLElement>('[data-lf-stepinfo]')!;
-    const status = form.querySelector<HTMLElement>('[data-lf-status]')!;
-    const submitBtn = form.querySelector<HTMLButtonElement>('[data-lf-submit]')!;
-    const submitLabel = form.querySelector<HTMLElement>('[data-lf-submit-label]')!;
+  function init(form: HTMLFormElement) {
+    const cfg = JSON.parse(form.dataset.config || '{}') as { endpoint: string; wa: string; variant: string };
+    const steps = [...form.querySelectorAll<HTMLFieldSetElement>('.qz__step')];
+    const bar = form.querySelector<HTMLElement>('[data-bar]')!;
+    const count = form.querySelector<HTMLElement>('[data-count]')!;
+    const back = form.querySelector<HTMLButtonElement>('[data-back]')!;
+    const done = form.querySelector<HTMLElement>('[data-done]')!;
+    const progress = form.querySelector<HTMLElement>('[role=progressbar]')!;
+    const base = { form_id: 'marketing_diagnosis', form_variant: cfg.variant };
     const renderedAt = Date.now();
+    const leadId = (() => { try { return crypto.randomUUID(); } catch { return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`; } })();
+    let current = 1;
     let started = false;
     let sending = false;
-    let current = 1;
-    const leadId = (() => {
-      try { return crypto.randomUUID(); } catch { return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`; }
-    })();
 
-    const base = { form_id: 'strategy_call', form_variant: cfg.variant };
-    const field = (n: string) => form.elements.namedItem(n) as HTMLInputElement | null;
-
-    /* ---------- validation ---------- */
+    const values = (n: string) => [...form.querySelectorAll<HTMLInputElement>(`[name="${n}"]:checked`)].map((i) => i.value);
+    const val = (n: string) => (form.elements.namedItem(n) as HTMLInputElement | null)?.value.trim() || '';
     const normPhone = (v: string) => v.replace(/[^\d+]/g, '').replace(/^\+?972/, '0');
-    const rules: Record<string, (v: string) => string> = {
-      name: (v) => (v.trim().length < 2 ? 'נא להזין שם מלא' : ''),
-      phone: (v) => (/^0(5\d|[23489]|7\d)\d{7}$/.test(normPhone(v)) ? '' : 'נא להזין מספר טלפון ישראלי תקין'),
-      email: (v) => (/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) ? '' : 'נא להזין כתובת אימייל תקינה'),
-      website: (v) => (!v.trim() || /^(https?:\/\/)?[\w-]+(\.[\w-]+)+([/?#].*)?$/i.test(v.trim()) ? '' : 'כתובת האתר לא נראית תקינה'),
-    };
-    function validate(name: string, report = true): boolean {
-      const el = field(name);
-      if (!el || !rules[name]) return true;
-      const msg = rules[name](el.value);
-      const err = document.getElementById(`lf-${name}-err`);
-      if (report) {
-        el.setAttribute('aria-invalid', msg ? 'true' : 'false');
-        if (err) err.textContent = msg;
-      }
-      if (msg && report) track('form_error', { ...base, form_step: current, error_field: name, error_type: 'validation' });
-      return !msg;
-    }
-    ['name', 'phone', 'email', 'website'].forEach((n) => {
-      const el = field(n);
-      el?.addEventListener('blur', () => { if (el.value) validate(n); });
-      el?.addEventListener('input', () => { if (el.getAttribute('aria-invalid') === 'true') validate(n); });
-    });
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    /* ---------- start ---------- */
-    form.addEventListener('focusin', () => {
-      if (started) return;
-      started = true;
-      track('form_start', base);
-      if (cfg.turnstile) loadTurnstile();
-    });
-
-    /* ---------- steps ---------- */
-    function go(n: number) {
+    function go(n: number, focus = true) {
       current = n;
-      steps.forEach((s) => (s.hidden = Number(s.dataset.step) !== n));
+      steps.forEach((st) => (st.hidden = Number(st.dataset.step) !== n));
+      done.hidden = true;
       bar.style.width = `${(n / steps.length) * 100}%`;
-      info.textContent = `שלב ${n} מתוך ${steps.length}`;
-      const first = steps[n - 1].querySelector<HTMLElement>('input:not([type=hidden]), select');
-      first?.focus();
-    }
-    bar.style.width = `${100 / steps.length}%`;
-    form.querySelector('[data-lf-next]')!.addEventListener('click', () => {
-      const ok = ['name', 'phone', 'email'].map((n) => validate(n)).every(Boolean);
-      if (!ok) {
-        const bad = ['name', 'phone', 'email'].find((n) => field(n)?.getAttribute('aria-invalid') === 'true');
-        if (bad) field(bad)?.focus();
-        return;
+      count.textContent = `${n}/${steps.length}`;
+      progress.setAttribute('aria-valuenow', String(n));
+      back.hidden = n === 1;
+      if (focus) {
+        const top = form.getBoundingClientRect().top + scrollY - 90;
+        if (Math.abs(scrollY - top) > 40) scrollTo({ top, behavior: reduce ? 'auto' : 'smooth' });
+        steps[n - 1].querySelector<HTMLElement>('input, button')?.focus({ preventScroll: true });
       }
-      track('form_step_completed', { ...base, form_step: 1 });
-      go(2);
-    });
-    form.querySelector('[data-lf-back]')!.addEventListener('click', () => go(1));
-    // Enter in step 1 → next
-    steps[0].addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && (e.target as HTMLElement).tagName === 'INPUT') { e.preventDefault(); form.querySelector<HTMLButtonElement>('[data-lf-next]')!.click(); }
-    });
-
-    /* ---------- turnstile ---------- */
-    function loadTurnstile() {
-      const holder = form.querySelector<HTMLElement>('[data-lf-turnstile]')!;
-      const s = document.createElement('script');
-      s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
-      s.async = true;
-      s.onload = () => (window as any).turnstile?.render(holder, { sitekey: cfg.turnstile, language: 'he', appearance: 'interaction-only' });
-      document.head.appendChild(s);
     }
 
-    /* ---------- submit ---------- */
-    function setStatus(kind: 'error' | 'info', msg: string) {
-      status.hidden = false;
-      status.className = `lf__status lf__status--${kind}`;
-      status.textContent = msg;
+    function stepError(n: number, msg: string) {
+      const el = steps[n - 1]?.querySelector<HTMLElement>('[data-err]');
+      if (el) el.textContent = msg;
+      if (msg) track('form_error', { ...base, form_step: n, error_type: 'validation' });
     }
+
+    function validStep(n: number): boolean {
+      if (n === 1 && !values('stuck').length) { stepError(1, 'בחרו לפחות תשובה אחת'); return false; }
+      if (n === 2 && !values('improve').length) { stepError(2, 'בחרו לפחות תחום אחד'); return false; }
+      if (n === 3 && !values('budget_planned').length) { stepError(3, 'בחרו תקציב'); return false; }
+      if (n === 4 && !values('budget_now').length) { stepError(4, 'בחרו תשובה'); return false; }
+      stepError(n, '');
+      return true;
+    }
+
+    function next() {
+      if (!validStep(current)) return;
+      track('form_step_completed', { ...base, form_step: current });
+      go(current + 1);
+    }
+
+    const start = () => { if (!started) { started = true; track('form_start', base); } };
+    form.addEventListener('change', (e) => {
+      start();
+      const t = e.target as HTMLInputElement;
+      if (t.matches('[data-auto]') && t.checked) setTimeout(next, 220);
+      if (t.type === 'checkbox') stepError(current, '');
+    });
+    form.addEventListener('focusin', start);
+    form.querySelectorAll('[data-next]').forEach((b) => b.addEventListener('click', next));
+    back.addEventListener('click', () => go(Math.max(1, current - 1)));
+    form.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && (e.target as HTMLElement).tagName === 'INPUT' && current < steps.length) { e.preventDefault(); next(); }
+    });
+
+    function waMessage(d: Record<string, string>) {
+      const lines = [
+        'היי BoostRize, מילאתי את השאלון באתר:',
+        '',
+        `*שם:* ${d.name}`,
+        `*טלפון:* ${d.phone}`,
+        `*איפה השיווק נתקע:* ${d.stuck}`,
+        `*מה רוצים לשפר:* ${d.improve}`,
+        `*תקציב פרסום חודשי:* ${d.budget_planned}`,
+        `*מוציאים היום על פרסום:* ${d.budget_now}`,
+      ];
+      if (d.instagram) lines.push(`*אינסטגרם:* ${d.instagram}`);
+      if (d.facebook) lines.push(`*פייסבוק:* ${d.facebook}`);
+      if (d.website) lines.push(`*אתר:* ${d.website}`);
+      if (d.other_assets) lines.push(`*נכסים נוספים:* ${d.other_assets}`);
+      return lines.join('\n');
+    }
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       if (sending) return;
-      if (current === 1) { form.querySelector<HTMLButtonElement>('[data-lf-next]')!.click(); return; }
-      const ok = ['name', 'phone', 'email'].map((n) => validate(n, false)).every(Boolean);
-      if (!ok) { go(1); ['name', 'phone', 'email'].forEach((n) => validate(n)); return; }
-      if (!validate('website')) { field('website')?.focus(); return; }
+      const name = val('name');
+      const phone = normPhone(val('phone'));
+      const nameErr = document.getElementById('qz-name-err')!;
+      const phoneErr = document.getElementById('qz-phone-err')!;
+      nameErr.textContent = name.length < 2 ? 'נא להזין שם מלא' : '';
+      phoneErr.textContent = /^0(5\d|[23489]|7\d)\d{7}$/.test(phone) ? '' : 'נא להזין מספר טלפון ישראלי תקין';
+      (form.elements.namedItem('name') as HTMLInputElement).setAttribute('aria-invalid', nameErr.textContent ? 'true' : 'false');
+      (form.elements.namedItem('phone') as HTMLInputElement).setAttribute('aria-invalid', phoneErr.textContent ? 'true' : 'false');
+      if (nameErr.textContent || phoneErr.textContent) {
+        track('form_error', { ...base, form_step: 6, error_type: 'validation' });
+        (form.elements.namedItem(nameErr.textContent ? 'name' : 'phone') as HTMLInputElement).focus();
+        return;
+      }
+
+      const a = getAttribution() as Record<string, string>;
+      const data: Record<string, string> = {
+        name, phone,
+        stuck: values('stuck').join(', '),
+        improve: values('improve').join(', '),
+        budget_planned: values('budget_planned')[0] || '',
+        budget_now: values('budget_now')[0] || '',
+        instagram: val('instagram'), facebook: val('facebook'), website: val('website'), other_assets: val('other_assets'),
+      };
+      const waUrl = `https://wa.me/${cfg.wa}?text=${encodeURIComponent(waMessage(data))}`;
+      form.querySelector<HTMLAnchorElement>('[data-wa-link]')!.href = waUrl;
 
       sending = true;
-      status.hidden = true;
-      submitBtn.disabled = true;
-      submitLabel.textContent = 'שולח…';
-      const fd = new FormData(form);
-      const payload = {
-        lead_id: leadId,
-        name: String(fd.get('name') || '').trim(),
-        phone: normPhone(String(fd.get('phone') || '')),
-        email: String(fd.get('email') || '').trim().toLowerCase(),
-        business: String(fd.get('business') || '').trim(),
-        website: String(fd.get('website') || '').trim(),
-        industry: String(fd.get('industry') || ''),
-        budget: String(fd.get('budget') || ''),
-        deal_value: String(fd.get('deal_value') || ''),
-        advertised_before: String(fd.get('advertised_before') || ''),
-        goal: String(fd.get('goal') || ''),
-        marketing_consent: fd.get('marketing_consent') === 'yes',
-        form_variant: cfg.variant,
-        experiments: { hero_headline: getVariant('hero_headline') },
-        attribution: getAttribution(),
-        submitted_at: new Date().toISOString(),
-        hp: String(fd.get('company_url') || ''),
-        elapsed_ms: Date.now() - renderedAt,
-        turnstile_token: String(fd.get('cf-turnstile-response') || ''),
-      };
-      try {
-        const ctrl = new AbortController();
-        const timer = setTimeout(() => ctrl.abort(), 15000);
-        const res = await fetch(cfg.endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-          signal: ctrl.signal,
-        });
-        clearTimeout(timer);
-        const data = (await res.json().catch(() => ({}))) as { ok?: boolean; lead_id?: string; error?: string; fields?: string[] };
-        if (res.ok && data.ok) {
-          // generate_lead נשלח בעמוד התודה – רק פעם אחת לכל lead_id
-          try {
-            sessionStorage.setItem('br_pending_lead', JSON.stringify({ lead_id: data.lead_id || leadId, form_id: base.form_id, form_variant: cfg.variant, budget: payload.budget, industry: payload.industry }));
-          } catch { /* ignore */ }
-          location.assign(`${cfg.thankYou}`);
-          return;
-        }
-        if (res.status === 422 && data.fields?.length) {
-          data.fields.forEach((f) => { const el = field(f); el?.setAttribute('aria-invalid', 'true'); });
-          setStatus('error', 'חלק מהפרטים לא תקינים. נא לבדוק את השדות המסומנים ולנסות שוב.');
-          track('form_error', { ...base, form_step: 2, error_type: 'server_validation' });
-        } else if (res.status === 429) {
-          setStatus('error', 'נשלחו יותר מדי פניות בזמן קצר. נא לנסות שוב בעוד כמה דקות.');
-          track('form_error', { ...base, form_step: 2, error_type: 'rate_limited' });
-        } else {
-          throw new Error(data.error || `HTTP ${res.status}`);
-        }
-      } catch (err) {
-        setStatus('error', 'לא הצלחנו לשלוח את הפרטים כרגע. הפרטים שמילאת נשמרו בטופס, נא לנסות שוב בעוד רגע.');
-        track('form_error', { ...base, form_step: 2, error_type: 'network' });
-      } finally {
-        sending = false;
-        submitBtn.disabled = false;
-        submitLabel.textContent = 'שליחה ותיאום שיחה';
+      const btn = form.querySelector<HTMLButtonElement>('[data-submit]')!;
+      const label = form.querySelector<HTMLElement>('[data-submit-label]')!;
+      btn.disabled = true; label.textContent = 'שומר…';
+      // פותחים חלון כבר עכשיו (בתוך הלחיצה) כדי שדפדפני מובייל לא יחסמו אותו
+      const win = window.open('', '_blank');
+      let saved = false;
+      if (cfg.endpoint) {
+        try {
+          const res = await fetch(cfg.endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
+              ...data,
+              stuck: values('stuck'), improve: values('improve'),
+              lead_id: leadId, hp: val('company_url'), elapsed_ms: Date.now() - renderedAt,
+              utm_source: a.utm_source, utm_medium: a.utm_medium, utm_campaign: a.utm_campaign, utm_content: a.utm_content, utm_term: a.utm_term,
+              landing_page: a.landing_page,
+            }),
+            signal: AbortSignal.timeout(12000),
+          });
+          const j = (await res.json().catch(() => ({}))) as { ok?: boolean };
+          saved = Boolean(j.ok);
+        } catch { saved = false; }
+        if (!saved) track('form_error', { ...base, form_step: 6, error_type: 'sheet_save_failed' });
       }
+      try {
+        if (saved && !localStorage.getItem(`br_lead_sent_${leadId}`)) {
+          localStorage.setItem(`br_lead_sent_${leadId}`, '1');
+          track('generate_lead', { ...base, lead_id: leadId, lead_budget_range: data.budget_planned, currency: 'ILS' });
+        }
+      } catch { /* storage blocked */ }
+      track('whatsapp_click', { click_location: 'quiz_submit' });
+
+      steps.forEach((st) => (st.hidden = true));
+      done.hidden = false;
+      bar.style.width = '100%';
+      back.hidden = true;
+      done.focus();
+      sending = false; btn.disabled = false; label.textContent = 'שליחה בוואטסאפ';
+      if (win) win.location.href = waUrl; else location.assign(waUrl);
     });
+
+    go(1, false);
   }
 </script>
 
 <style>
-  .lead__layout { display: grid; gap: 3rem; align-items: start; }
-  .lead__copy { display: grid; gap: 1.5rem; align-content: start; }
+  .lead__layout { display: grid; gap: 2.5rem; align-items: start; }
+  .lead__copy { display: grid; gap: 1.25rem; align-content: start; }
   .lead__sub { font-size: var(--t-md); max-width: 40ch; }
   .lead__copy :global(.lead__face) { width: 120px; border-radius: 50%; }
   .lead__copy :global(.lead__face.mslot--preview) { width: min(100%, 320px); border-radius: var(--r-panel); }
-  .lead__promises { display: grid; gap: 0.6rem; font-weight: 500; }
-  .lead__promises li { display: flex; gap: 0.6rem; align-items: center; }
-  .lead__direct p { font-weight: 600; margin-bottom: 0.6rem; }
-  .lead__direct div { display: flex; flex-wrap: wrap; gap: 0.6rem; }
 
-  .lead__card { background: var(--white); border-radius: var(--r-panel); padding: clamp(1.5rem, 1rem + 2vw, 2.75rem); }
-  .lf { display: grid; gap: 1rem; }
-  .lf__progress { height: 4px; background: var(--fog); border-radius: 4px; overflow: hidden; }
-  .lf__progress span { display: block; height: 100%; width: 50%; background: var(--black); transition: width 300ms var(--ease); }
-  .lf__stepinfo { font-size: var(--t-sm); color: var(--slate); }
-  .lf__step { border: 0; padding: 0; min-width: 0; display: grid; gap: 1.1rem; }
-  .lf__legend { font-family: var(--display); font-weight: 700; font-size: var(--d-sm); line-height: 1; padding: 0; margin-bottom: 0.25rem; }
-  .lf__legend .opt { display: block; font-family: var(--text); font-size: var(--t-sm); font-weight: 400; color: var(--slate); margin-top: 0.4rem; }
-  .lf__row { display: grid; gap: 1.1rem; }
-  .lf__goals { border: 0; padding: 0; min-width: 0; }
-  .lf__goals legend { margin-bottom: 0.5rem; padding: 0; }
-  .lf__chips { display: flex; flex-wrap: wrap; gap: 0.45rem; }
-  .chip { position: relative; }
-  .chip input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
-  .chip span { display: inline-flex; align-items: center; min-height: 42px; padding: 0.4rem 0.95rem; border: 1.5px solid #b9c0c8; border-radius: var(--r-pill); font-size: var(--t-sm); transition: background-color 160ms, color 160ms, border-color 160ms; }
-  .chip:hover span { border-color: var(--black); }
-  .chip input:checked + span { background: var(--black); color: var(--white); border-color: var(--black); }
-  .chip input:focus-visible + span { outline: 3px solid var(--orange); outline-offset: 2px; }
-  .lf__hp { position: absolute; inset-inline-start: -9999px; width: 1px; height: 1px; overflow: hidden; }
-  .lf__actions { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap-reverse; }
-  .lf__actions .btn { flex: 1; }
-  .lf__back { background: none; border: 0; font-weight: 600; min-height: 44px; padding: 0.4rem 0; text-decoration: underline; text-underline-offset: 4px; }
-  .lf__status { padding: 0.9rem 1rem; border-radius: var(--r-field); font-weight: 600; font-size: var(--t-sm); }
-  .lf__status--error { background: #fdecea; color: var(--danger); }
-  .lf__privacy { display: flex; gap: 0.5rem; align-items: flex-start; font-size: 0.8125rem; color: var(--slate); line-height: 1.5; }
-  .lf__privacy :global(svg) { flex: none; margin-top: 2px; }
-  .lf__privacy a { color: var(--black); font-weight: 600; }
+  .lead__card { background: var(--white); border-radius: var(--r-panel); padding: clamp(1.25rem, 1rem + 2vw, 2.5rem); }
+  .qz { display: grid; gap: 1.25rem; }
+  .qz__top { display: flex; align-items: center; gap: 0.75rem; }
+  .qz__back { flex: none; width: 44px; height: 44px; display: grid; place-items: center; border: 1.5px solid #b9c0c8; border-radius: 50%; background: var(--white); }
+  .qz__back :global(.qz__back-ic) { transform: scaleX(-1); }
+  .qz__progress { flex: 1; height: 6px; background: var(--fog); border-radius: 6px; overflow: hidden; }
+  .qz__progress span { display: block; height: 100%; width: 16%; background: var(--orange); transition: width 300ms var(--ease); }
+  .qz__count { font-size: var(--t-sm); color: var(--slate); font-variant-numeric: tabular-nums; min-width: 2.5rem; text-align: end; }
+  .qz__step { border: 0; padding: 0; margin: 0; min-width: 0; display: grid; gap: 1rem; }
+  .qz__step[hidden], .qz__done[hidden], .qz__back[hidden] { display: none; }
+  .qz__step:not([hidden]) { animation: stepIn 280ms var(--ease); }
+  @keyframes stepIn { from { opacity: 0; transform: translateX(-12px); } }
+  .qz__q { font-family: var(--display); font-weight: 700; font-size: clamp(2rem, 1.6rem + 1.6vw, 2.75rem); line-height: 1; padding: 0; }
+  .qz__q { margin-bottom: 0.35rem; }
+  .qz__hint { color: var(--slate); font-size: var(--t-sm); margin-top: -0.4rem; }
+  .qz__opts { display: grid; gap: 0.6rem; }
+  .opt { position: relative; display: block; cursor: pointer; }
+  .opt input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+  .opt__box { display: flex; align-items: center; gap: 0.8rem; min-height: 60px; padding: 0.85rem 1rem; border: 2px solid #d5d9de; border-radius: 14px; font-weight: 600; font-size: var(--t-md); line-height: 1.3; transition: border-color 160ms, background-color 160ms; }
+  .opt__tick { flex: none; width: 24px; height: 24px; border: 2px solid #9aa1a9; border-radius: 6px; transition: background-color 160ms, border-color 160ms; }
+  .opt--radio .opt__tick { border-radius: 50%; }
+  .opt:hover .opt__box { border-color: var(--black); }
+  .opt input:checked + .opt__box { border-color: var(--black); background: #fff4ea; }
+  .opt input:checked + .opt__box .opt__tick { background: var(--black) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f37a1f' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center / 70% no-repeat; border-color: var(--black); }
+  .opt input:focus-visible + .opt__box { outline: 3px solid var(--orange); outline-offset: 2px; }
+  .opt--rich .opt__box { align-items: flex-start; }
+  .opt--rich .opt__tick { margin-top: 0.15rem; }
+  .opt--rich strong { display: block; font-size: var(--t-md); }
+  .opt--rich small { display: block; font-weight: 400; color: var(--slate); font-size: var(--t-sm); margin-top: 0.2rem; }
+  .qz__err { color: var(--danger); font-weight: 600; font-size: var(--t-sm); }
+  .qz__err:empty { display: none; }
+  .opt-l { font-weight: 400; color: var(--slate); }
+  .qz__hp { position: absolute; inset-inline-start: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .qz__privacy { display: flex; gap: 0.5rem; align-items: flex-start; font-size: 0.8125rem; color: var(--slate); }
+  .qz__privacy :global(svg) { flex: none; margin-top: 2px; }
+  .qz__privacy a { color: var(--black); font-weight: 600; }
+  .qz__done { display: grid; gap: 1rem; justify-items: start; outline: none; }
+  .qz__done-badge { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: var(--orange); }
 
-  .lf-off { display: grid; gap: 1rem; }
-  .lf-off__icon { display: none; }
-  .lf-off h3 { font-family: var(--display); font-weight: 700; font-size: var(--d-sm); line-height: 1; }
-  .lf-off p { color: var(--slate); }
-  .lf-off__links { display: grid; gap: 0.6rem; margin-top: 0.5rem; }
-
-  @media (min-width: 600px) { .lf__row { grid-template-columns: 1fr 1fr; } }
-  @media (min-width: 1024px) { .lead__layout { grid-template-columns: 1fr 1fr; gap: 5rem; } .lead__copy { position: sticky; top: calc(var(--header-h) + 3rem); } }
+  @media (min-width: 1024px) {
+    .lead__layout { grid-template-columns: 0.9fr 1.1fr; gap: 5rem; }
+    .lead__copy { position: sticky; top: calc(var(--header-h) + 3rem); }
+  }
+  @media (prefers-reduced-motion: reduce) { .qz__step:not([hidden]) { animation: none; } }
 </style>

@@ -36,11 +36,7 @@ const waBase = site.contact.whatsapp ? `https://wa.me/${site.contact.whatsapp}` 
           <ul role="list">{hero.audience.map((a) => <li><Icon name="check" size={16} stroke={3} />{a}</li>)}</ul>
         </div>
         <div class="hero__ctas">
-          {whatsappUrl ? (
-            <a class="btn btn--black btn--lg" href={whatsappUrl} target="_blank" rel="noopener" data-cta="hero-whatsapp"><Icon name="whatsapp" size={22} />שליחת הודעה בוואטסאפ</a>
-          ) : (
-            <a class="btn btn--black btn--lg" href="#contact" data-cta="hero-primary">{site.cta.primary}</a>
-          )}
+          <a class="btn btn--black btn--lg" href="#contact" data-cta="hero-quiz">בדיקה בדקה: איפה השיווק נתקע?</a>
         </div>
         <MediaSlot id="hero" preview={preview} class="hero__media" />
         <div class="hero__tools">

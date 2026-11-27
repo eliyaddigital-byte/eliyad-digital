@@ -49,6 +49,8 @@ export const site = {
 
   /** קבלת לידים – כתובת ה-Backend (Cloudflare Worker / פונקציה אחרת). ריק = הטופס מוצג במצב "בקרוב" ולא מקבל פניות */
   leads: {
+    /** Google Apps Script (Web app URL) ששומר את השאלון בגיליון. ריק = השאלון עובד ושולח לוואטסאפ בלבד */
+    sheetEndpoint: (env.PUBLIC_SHEET_ENDPOINT as string | undefined) ?? '',
     endpoint: (env.PUBLIC_LEAD_ENDPOINT as string | undefined) ?? '',
     /** Cloudflare Turnstile site key (ציבורי). ריק = ללא Turnstile, נשארים Honeypot + בדיקת זמן + Rate limit בשרת */
     turnstileSiteKey: (env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined) ?? '',
