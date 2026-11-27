@@ -16,7 +16,7 @@ export const hero = {
     b: 'פחות קליקים. יותר לקוחות.',
   } as Record<string, string>,
   subheadline:
-    'אנחנו מנהלים קמפיינים בגוגל, מטא, טיקטוק ולינקדאין, ומודדים אותם עד העסקה. לא עד הקליק.',
+    'אנחנו מנהלים קמפיינים בגוגל, מטא וטיקטוק, ומודדים אותם עד העסקה. לא עד הקליק.',
   bullets: [
     'מדידה מקצה לקצה, מהמודעה ועד העסקה',
     'דוחות שקופים בשפה עסקית, לא בז׳רגון',
@@ -35,7 +35,6 @@ export const platforms: { name: string; group: 'ads' | 'data' | 'automation'; ic
   { name: 'Meta Ads', group: 'ads', icon: 'meta' },
   { name: 'Instagram Ads', group: 'ads', icon: 'instagram' },
   { name: 'TikTok Ads', group: 'ads', icon: 'tiktok' },
-  { name: 'LinkedIn Ads', group: 'ads', icon: 'linkedin' },
   { name: 'YouTube Ads', group: 'ads', icon: 'youtube' },
   { name: 'Taboola', group: 'ads' },
   { name: 'Outbrain', group: 'ads' },
@@ -89,7 +88,6 @@ export const services: Service[] = [
   { slug: 'google-ads', icon: 'search', category: 'ads', title: 'פרסום בגוגל', value: 'להופיע בדיוק כשהלקוח מחפש את מה שאתה מוכר, ולשלם על כוונת קנייה ולא על סקרנות.', gets: ['חיפוש, Performance Max, YouTube ורשת המדיה', 'מחקר מילות מפתח ומילים שליליות', 'מעקב המרות מתקדם ו-Enhanced Conversions'] },
   { slug: 'meta-ads', icon: 'users', category: 'ads', title: 'פרסום בפייסבוק ובאינסטגרם', value: 'יצירת ביקוש אצל קהלים שעוד לא מכירים אותך, עם קריאייטיב שעוצר גלילה ומסר שמוכר.', gets: ['אסטרטגיית קריאייטיב ובדיקות A/B', 'חיבור Conversions API למדידה מדויקת', 'קהלים מבוססי דאטה מה-CRM'] },
   { slug: 'tiktok-ads', icon: 'play', category: 'ads', title: 'פרסום בטיקטוק', value: 'הגעה לקהלים צעירים ומעורבים בפורמט טבעי לפלטפורמה, בלי לשרוף תקציב על "ויראליות".', gets: ['קונספטים לווידאו קצר שמותאמים לפלטפורמה', 'Spark Ads ושיתופי פעולה', 'מדידה עם TikTok Pixel ו-Events API'] },
-  { slug: 'linkedin-ads', icon: 'briefcase', category: 'ads', title: 'פרסום בלינקדאין', value: 'פנייה ממוקדת למקבלי החלטות לפי תפקיד, ענף וגודל חברה, לעסקי B2B שכל עסקה בהם שווה הרבה.', gets: ['טרגוט לפי תפקיד, חברה ובכירות', 'Lead Gen Forms עם חיבור ל-CRM', 'משפכי תוכן למכירה מורכבת'] },
   { slug: 'ecommerce', icon: 'cart', category: 'ads', title: 'שיווק לחנויות איקומרס', value: 'צמיחה רווחית לחנות שלך: לא רק ROAS יפה בדוח, אלא רווח אמיתי אחרי עלויות.', gets: ['Shopping, PMax וקטלוג דינמי', 'אופטימיזציה לפי רווחיות מוצר', 'שימור לקוחות ו-LTV'] },
   { slug: 'strategy', icon: 'compass', category: 'growth', title: 'אסטרטגיה שיווקית', value: 'תוכנית עבודה ברורה לפני שמוציאים שקל: למי מוכרים, מה מוכרים, באיזה ערוץ ובאיזה סדר.', gets: ['מחקר שוק, קהלים ומתחרים', 'בידול ומסרים מרכזיים', 'יעדים, תקציב ו-KPI לכל שלב'] },
   { slug: 'funnels', icon: 'funnel', category: 'growth', title: 'בניית משפכי שיווק', value: 'מסלול מכוון שלוקח אדם שלא מכיר אותך עד לשיחת מכירה עם מישהו שכבר סומך עליך.', gets: ['מיפוי מסע לקוח ונקודות חיכוך', 'תוכן חימום ורימרקטינג', 'תסריטי פולואפ ואוטומציה'] },
@@ -207,7 +205,7 @@ export const faqSection = {
     },
     {
       q: 'באילו פלטפורמות אתם מפרסמים?',
-      a: 'Google Ads (כולל YouTube), Meta (פייסבוק ואינסטגרם), TikTok, LinkedIn, Taboola ו-Outbrain. לצד הפרסום אנחנו עובדים עם GA4, Google Tag Manager, Looker Studio, Make ו-Zapier למדידה, דוחות ואוטומציה. את הערוצים בוחרים לפי הקהל והיעדים שלך, לא לפי מה שנוח לנו.',
+      a: 'Google Ads (כולל YouTube), Meta (פייסבוק ואינסטגרם), TikTok, Taboola ו-Outbrain. לצד הפרסום אנחנו עובדים עם GA4, Google Tag Manager, Looker Studio, Make ו-Zapier למדידה, דוחות ואוטומציה. את הערוצים בוחרים לפי הקהל והיעדים שלך, לא לפי מה שנוח לנו.',
     },
     {
       q: 'האם אפשר לעבוד איתכם בלי התחייבות?',

@@ -1,7 +1,7 @@
 ---
 import { services, servicesSection, platforms } from '../content/home';
 import { withBase } from '../lib/text';
-const groupIcons: Record<string, string[]> = { ads: ['google-ads', 'meta', 'tiktok', 'linkedin', 'youtube'], growth: [], data: ['google-analytics', 'google-tag-manager', 'zapier', 'make'] };
+const groupIcons: Record<string, string[]> = { ads: ['google-ads', 'meta', 'tiktok', 'youtube'], growth: [], data: ['google-analytics', 'google-tag-manager', 'zapier', 'make'] };
 const nameOf = (icon: string) => platforms.find((p) => p.icon === icon)?.name || icon;
 const groups = servicesSection.categories.map((c) => ({ ...c, items: services.filter((s) => s.category === c.id) }));
 const blurbs: Record<string, string> = {
