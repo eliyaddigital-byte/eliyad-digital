@@ -11,3 +11,5 @@ qa-output/
 backend/lead-worker/.wrangler/
 backend/lead-worker/.dev.vars
 .claude/
+backend/google-sheets/Code.local.gs
+backend/google-sheets/.secret
