@@ -6,20 +6,20 @@ import { chromium } from 'playwright';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
-const fontPath = require.resolve('@fontsource/karantina/files/karantina-hebrew-700-normal.woff2');
-const fontLatin = require.resolve('@fontsource/ibm-plex-sans-hebrew/files/ibm-plex-sans-hebrew-latin-700-normal.woff2');
-const fontText = require.resolve('@fontsource/ibm-plex-sans-hebrew/files/ibm-plex-sans-hebrew-hebrew-400-normal.woff2');
+const fontPath = require.resolve('@fontsource-variable/rubik/files/rubik-hebrew-wght-normal.woff2');
+const fontLatin = require.resolve('@fontsource-variable/rubik/files/rubik-latin-wght-normal.woff2');
+const fontText = fontPath;
 const f64 = (p) => readFileSync(p).toString('base64');
 const MARK = `<path fill="#f37a1f" fill-rule="evenodd" d="M10 4H55a28 28 0 0 1 8 54.8L90 116H63L38.5 62H34v-4H10Z M34 24V40H54a8 8 0 0 0 0-16Z"/><path fill="#f37a1f" d="M34 62 22 116H0l9-41-7 3L6 52l28 6-8 6Z"/><circle cx="90" cy="12" r="10" fill="#f37a1f"/>`;
-const css = `@font-face{font-family:D;src:url(data:font/woff2;base64,${f64(fontPath)}) format('woff2')}
-@font-face{font-family:R;src:url(data:font/woff2;base64,${f64(fontLatin)}) format('woff2');font-weight:700}
+const css = `@font-face{font-family:D;src:url(data:font/woff2;base64,${f64(fontPath)}) format('woff2');font-weight:300 900}
+@font-face{font-family:R;src:url(data:font/woff2;base64,${f64(fontLatin)}) format('woff2');font-weight:300 900}
 @font-face{font-family:T;src:url(data:font/woff2;base64,${f64(fontText)}) format('woff2')}
 *{margin:0;box-sizing:border-box}html{overflow:hidden}body{font-family:R}`;
 const logo = (color, size) => `<span style="display:inline-flex;align-items:flex-end;font-weight:800;letter-spacing:-.035em;line-height:1;color:${color};font-size:${size}px;direction:ltr">Boost<svg viewBox="0 0 100 120" style="height:.98em;width:auto;margin:0 .03em .06em .02em;overflow:visible">${MARK}</svg>ize</span>`;
 
 const og = `<html dir="rtl"><style>${css}
 body{width:1200px;height:630px;background:#f37a1f;position:relative;overflow:hidden;padding:64px 80px}
-h1{font-family:D;font-weight:700;font-size:190px;line-height:.9;color:#000;margin-top:40px}
+h1{font-family:D;font-weight:900;font-size:120px;line-height:1.05;letter-spacing:-2px;color:#000;margin-top:40px}
 p{font-family:T;font-size:34px;color:#000;margin-top:34px;max-width:900px}
 .logo{position:absolute;left:80px;top:64px}</style>
 <body><div class="logo">${logo('#000000', 52).replace(/#f37a1f/g,'#000000')}</div><h1>לא עוד לידים.<br>יותר לקוחות.</h1><p>קמפיינים ממומנים שנמדדים עד העסקה. לא עד הקליק.</p></body></html>`;
