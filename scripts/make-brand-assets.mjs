@@ -40,6 +40,4 @@ await b.close();
 // Standalone vector logos (text rendered with system bold sans as fallback – replace with the original vector logo when available)
 mkdirSync('public/brand', { recursive: true });
 const svgLogo = (fill) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 130"><text x="0" y="112" font-family="Rubik, Arial, sans-serif" font-weight="800" font-size="128" letter-spacing="-4" fill="${fill}">Boost</text><g transform="translate(318 8) scale(0.9)">${MARK}</g><text x="408" y="112" font-family="Rubik, Arial, sans-serif" font-weight="800" font-size="128" letter-spacing="-4" fill="${fill}">ize</text></svg>`;
-writeFileSync('public/brand/logo.svg', svgLogo('#0f0f0f'));
-writeFileSync('public/brand/logo-light.svg', svgLogo('#ffffff'));
 console.log('brand assets generated');
