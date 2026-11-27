@@ -18,11 +18,11 @@ const css = `@font-face{font-family:D;src:url(data:font/woff2;base64,${f64(fontP
 const logo = (color, size) => `<span style="display:inline-flex;align-items:flex-end;font-weight:800;letter-spacing:-.035em;line-height:1;color:${color};font-size:${size}px;direction:ltr">Boost<svg viewBox="0 0 100 120" style="height:.98em;width:auto;margin:0 .03em .06em .02em;overflow:visible">${MARK}</svg>ize</span>`;
 
 const og = `<html dir="rtl"><style>${css}
-body{width:1200px;height:630px;background:#f37a1f;position:relative;overflow:hidden;padding:64px 80px}
+body{width:1200px;height:630px;background:#f0741a;position:relative;overflow:hidden;padding:64px 80px}
 h1{font-family:D;font-weight:900;font-size:120px;line-height:1.05;letter-spacing:-2px;color:#000;margin-top:40px}
 p{font-family:T;font-size:34px;color:#000;margin-top:34px;max-width:900px}
-.logo{position:absolute;left:80px;top:64px}</style>
-<body><div class="logo">${logo('#000000', 52).replace(/#f37a1f/g,'#000000')}</div><h1>לא עוד לידים.<br>יותר לקוחות.</h1><p>קמפיינים ממומנים שנמדדים עד העסקה. לא עד הקליק.</p></body></html>`;
+.logo{position:absolute;left:80px;top:56px;background:#fff;padding:14px 22px;border-radius:999px}</style>
+<body><div class="logo"><img src="data:image/png;base64,${readFileSync('public/brand/boostrize-logo.png').toString('base64')}" style="height:46px;display:block"></div><h1>לא עוד לידים.<br>יותר לקוחות.</h1><p>קמפיינים ממומנים שנמדדים עד העסקה. לא עד הקליק.</p></body></html>`;
 
 const icon = (size, radius) => `<html><style>${css}body{width:${size}px;height:${size}px;background:transparent}</style><body><div style="width:${size}px;height:${size}px;border-radius:${radius}px;background:#0f0f0f;display:grid;place-items:center"><svg viewBox="0 0 100 120" style="height:${Math.round(size * 0.62)}px;overflow:visible">${MARK}</svg></div></body></html>`;
 
@@ -35,10 +35,6 @@ const shot = async (html, w, h, path, omitBackground = false) => {
   await p.close();
 };
 await shot(og, 1200, 630, 'public/og-image.png');
-await shot(icon(32, 7), 32, 32, 'public/favicon-32.png', true);
-await shot(icon(180, 0), 180, 180, 'public/apple-touch-icon.png');
-await shot(icon(192, 40), 192, 192, 'public/favicon-192.png', true);
-await shot(icon(512, 100), 512, 512, 'public/favicon-512.png', true);
 await b.close();
 
 // Standalone vector logos (text rendered with system bold sans as fallback – replace with the original vector logo when available)

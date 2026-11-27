@@ -64,7 +64,7 @@ function chartPath(points: { y: number }[], w = 300, h = 110) {
               {c.chart && c.chart.points.length > 1 && (
                 <figure class="case__chart">
                   <svg viewBox="0 0 300 110" role="img" aria-label={`${c.chart.label}: ${c.chart.points.map((p) => `${p.x} ${p.y}`).join(', ')}`}>
-                    <path d={chartPath(c.chart.points)} fill="none" stroke="#f37a1f" stroke-width="3" stroke-linecap="round" />
+                    <path d={chartPath(c.chart.points)} fill="none" stroke="#f0741a" stroke-width="3" stroke-linecap="round" />
                   </svg>
                   <figcaption>{c.chart.label}</figcaption>
                 </figure>

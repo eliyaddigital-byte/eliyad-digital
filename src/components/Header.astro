@@ -50,8 +50,7 @@ const cta = whatsappUrl
 
 <style>
   .hdr { position: sticky; top: 0; z-index: 80; background: var(--white); transition: background-color 200ms var(--ease), box-shadow 200ms var(--ease); }
-  .hdr--home { background: var(--orange); --logo-accent: var(--black); }
-  .hdr:global(.is-scrolled) { background: var(--white); box-shadow: 0 1px 0 var(--line); --logo-accent: var(--orange); }
+  .hdr:global(.is-scrolled) { box-shadow: 0 1px 0 var(--line); }
   .hdr__bar { height: var(--header-h); display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
   .hdr__logo { display: inline-flex; text-decoration: none; padding: 4px 0; }
   .hdr__nav { display: none; }

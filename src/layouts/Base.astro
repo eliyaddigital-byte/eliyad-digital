@@ -32,7 +32,7 @@ const orgSchema: Record<string, unknown> = {
   ...(site.brand.legalName ? { legalName: site.brand.legalName } : {}),
   description: site.brand.description,
   url: abs('/'),
-  logo: abs('brand/logo.svg'),
+  logo: abs('brand/boostrize-logo.png'),
   image: ogUrl,
   areaServed: { '@type': 'Country', name: 'Israel' },
   knowsLanguage: ['he', 'en'],
@@ -77,7 +77,7 @@ void whatsappUrl; void telUrl; void mailUrl;
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex, follow" />}
-    <meta name="theme-color" content="#f37a1f" />
+    <meta name="theme-color" content="#f0741a" />
     <meta name="format-detection" content="telephone=no" />
     {site.analytics.googleSiteVerification && <meta name="google-site-verification" content={site.analytics.googleSiteVerification} />}
 

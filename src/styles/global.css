@@ -5,7 +5,7 @@
 
 :root {
   /* ---- Color (6 named tokens) ---- */
-  --orange: #f37a1f;      /* Boost orange – the field, not an accent */
+  --orange: #f0741a;      /* Boost orange (exact logo colour) – the field, not an accent */
   --black: #000000;
   --white: #ffffff;
   --fog: #eef0f2;         /* cool light gray for alternate bands */
